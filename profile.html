@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - Profile</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(90deg,#f06a00 0%,#d85a00 100%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .browser-frame{
+      width:1180px;
+      max-width:100%;
+      background:#8f4720;
+      border-radius:18px;
+      padding:18px 18px 24px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .dot{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .main-card{
+      background:#fff;
+      border-radius:32px;
+      overflow:hidden;
+      min-height:720px;
+    }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 26px;
+      border-bottom:1px solid #eee;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#8c5a46;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      background:#efefef;
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:18px;
+      color:#666;
+      cursor:pointer;
+    }
+
+    .nav-btn.active{
+      background:#e5e5e5;
+      font-weight:700;
+    }
+
+    .content{
+      padding:30px;
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:28px;
+    }
+
+    .profile-left{
+      background:#f9f9f9;
+      border-radius:28px;
+      padding:28px 22px;
+      text-align:center;
+    }
+
+    .avatar{
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:#cce7ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:58px;
+      margin:0 auto 18px;
+    }
+
+    .profile-left h2{
+      font-size:30px;
+      color:#333;
+      margin-bottom:8px;
+    }
+
+    .profile-left p{
+      color:#777;
+      font-size:17px;
+      line-height:1.6;
+    }
+
+    .profile-right{
+      background:#fff;
+    }
+
+    .page-title{
+      font-size:40px;
+      font-weight:800;
+      color:#333;
+      margin-bottom:24px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px 24px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .form-group.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-size:18px;
+      font-weight:700;
+      color:#444;
+    }
+
+    input, select, textarea{
+      width:100%;
+      border:2px solid #ddd;
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:17px;
+      outline:none;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .hint{
+      font-size:14px;
+      color:#888;
+    }
+
+    .bottom-actions{
+      margin-top:28px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .action-btn{
+      border:none;
+      border-radius:999px;
+      padding:14px 24px;
+      font-size:19px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .save-btn{
+      background:#d67b49;
+      color:white;
+    }
+
+    .reset-btn{
+      background:#efefef;
+      color:#666;
+    }
+
+    .back-btn{
+      background:#93c36b;
+      color:white;
+    }
+
+    @media (max-width: 900px){
+      .content{
+        grid-template-columns:1fr;
+      }
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn" onclick="goHome()">หน้าหลัก</button>
+          <button type="button" class="nav-btn" onclick="goHistory()">ประวัติการใช้งาน</button>
+          <button type="button" class="nav-btn active">โปรไฟล์</button>
+          <button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="profile-left">
+          <div class="avatar">👤</div>
+          <h2 id="previewName">ชื่อผู้ใช้</h2>
+          <p id="previewEmail">example@email.com</p>
+        </div>
+
+        <div class="profile-right">
+          <div class="page-title">โปรไฟล์ผู้ใช้</div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fullName">ชื่อ</label>
+              <input type="text" id="fullName" placeholder="กรอกชื่อของคุณ">
+            </div>
+
+            <div class="form-group">
+              <label for="email">อีเมล</label>
+              <input type="email" id="email" placeholder="กรอกอีเมล">
+            </div>
+
+            <div class="form-group full">
+              <label for="favoriteFoods">อาหารที่ชอบ</label>
+              <input type="text" id="favoriteFoods" placeholder="เช่น อาหารไทย, ของหวาน, ญี่ปุ่น">
+              <div class="hint">คั่นด้วยเครื่องหมายจุลภาค เช่น อาหารไทย, ของหวาน</div>
+            </div>
+
+            <div class="form-group full">
+              <label for="avoidFoods">อาหารที่ไม่กิน / แพ้อาหาร</label>
+              <input type="text" id="avoidFoods" placeholder="เช่น กุ้ง, ถั่ว, นม">
+              <div class="hint">คั่นด้วยเครื่องหมายจุลภาค เช่น กุ้ง, ถั่ว</div>
+            </div>
+
+            <div class="form-group">
+              <label for="budget">งบประมาณประจำ</label>
+              <select id="budget">
+                <option value="">-- เลือกงบประมาณ --</option>
+                <option value="ต่ำกว่า 50 บาท">ต่ำกว่า 50 บาท</option>
+                <option value="50-100 บาท">50-100 บาท</option>
+                <option value="100-150 บาท">100-150 บาท</option>
+                <option value="150-300 บาท">150-300 บาท</option>
+                <option value="300-400 บาท">300-400 บาท</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="spicyLevel">ระดับความเผ็ด</label>
+              <select id="spicyLevel">
+                <option value="">-- เลือกระดับความเผ็ด --</option>
+                <option value="ไม่ใส่พริก">ไม่ใส่พริก</option>
+                <option value="เผ็ดน้อยมาก">เผ็ดน้อยมาก</option>
+                <option value="เผ็ดน้อย">เผ็ดน้อย</option>
+                <option value="เผ็ดปานกลาง">เผ็ดปานกลาง</option>
+                <option value="เผ็ดปกติ">เผ็ดปกติ</option>
+                <option value="เผ็ดมาก">เผ็ดมาก</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label for="bio">หมายเหตุเพิ่มเติม</label>
+              <textarea id="bio" placeholder="เช่น ชอบอาหารง่าย ๆ ไม่อยากรอนาน"></textarea>
+            </div>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="action-btn save-btn" onclick="saveProfile()">บันทึกโปรไฟล์</button>
+            <button class="action-btn reset-btn" onclick="resetProfile()">ล้างข้อมูล</button>
+            <button class="action-btn back-btn" onclick="goHome()">กลับหน้าหลัก</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goHome() {
+      window.location.href = "result.html";
+    }
+
+    function goHistory() {
+      window.location.href = "history.html";
+    }
+
+    function logout() {
+  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+  if (confirmLogout) {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInName");
+    window.location.href = "login.html";
+  }
+}
+    function saveProfile() {
+      const profileData = {
+        fullName: document.getElementById("fullName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        favoriteFoods: document.getElementById("favoriteFoods").value.trim(),
+        avoidFoods: document.getElementById("avoidFoods").value.trim(),
+        budget: document.getElementById("budget").value,
+        spicyLevel: document.getElementById("spicyLevel").value,
+        bio: document.getElementById("bio").value.trim()
+      };
+
+      localStorage.setItem("userProfile", JSON.stringify(profileData));
+
+      updatePreview(profileData);
+      alert("บันทึกโปรไฟล์เรียบร้อยแล้ว");
+    }
+
+    function loadProfile() {
+      const savedProfile = JSON.parse(localStorage.getItem("userProfile"));
+
+      if (!savedProfile) return;
+
+      document.getElementById("fullName").value = savedProfile.fullName || "";
+      document.getElementById("email").value = savedProfile.email || "";
+      document.getElementById("favoriteFoods").value = savedProfile.favoriteFoods || "";
+      document.getElementById("avoidFoods").value = savedProfile.avoidFoods || "";
+      document.getElementById("budget").value = savedProfile.budget || "";
+      document.getElementById("spicyLevel").value = savedProfile.spicyLevel || "";
+      document.getElementById("bio").value = savedProfile.bio || "";
+
+      updatePreview(savedProfile);
+    }
+
+    function updatePreview(profile) {
+      document.getElementById("previewName").textContent =
+        profile.fullName || "ชื่อผู้ใช้";
+
+      document.getElementById("previewEmail").textContent =
+        profile.email || "example@email.com";
+    }
+
+    function resetProfile() {
+      const ok = confirm("ต้องการล้างข้อมูลโปรไฟล์หรือไม่");
+      if (!ok) return;
+
+      localStorage.removeItem("userProfile");
+
+      document.getElementById("fullName").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("favoriteFoods").value = "";
+      document.getElementById("avoidFoods").value = "";
+      document.getElementById("budget").value = "";
+      document.getElementById("spicyLevel").value = "";
+      document.getElementById("bio").value = "";
+
+      updatePreview({});
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

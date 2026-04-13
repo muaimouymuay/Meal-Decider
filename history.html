@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - History</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(90deg,#f06a00 0%,#d85a00 100%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .browser-frame{
+      width:1180px;
+      max-width:100%;
+      background:#8f4720;
+      border-radius:18px;
+      padding:18px 18px 24px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .dot{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .searchbar{
+      width:520px;
+      max-width:55%;
+      height:54px;
+      border-radius:14px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      color:#333;
+      font-size:28px;
+    }
+
+    .main-card{
+      background:#fff;
+      border-radius:32px;
+      overflow:hidden;
+      min-height:700px;
+      position:relative;
+    }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 26px;
+      border-bottom:1px solid #eee;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#8c5a46;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      background:#efefef;
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:18px;
+      color:#666;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .nav-btn:hover{
+      background:#e1e1e1;
+    }
+
+    .nav-btn.active{
+      background:#e5e5e5;
+      font-weight:700;
+    }
+
+    .content{
+      padding:30px;
+    }
+
+    .title-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:24px;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .page-title{
+      font-size:40px;
+      font-weight:800;
+      color:#333;
+    }
+
+    .subtitle{
+      font-size:18px;
+      color:#777;
+      margin-top:6px;
+    }
+
+    .clear-btn{
+      border:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:18px;
+      font-weight:700;
+      background:#efefef;
+      color:#666;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .clear-btn:hover{
+      background:#e0e0e0;
+    }
+
+    .history-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .history-card{
+      border:2px solid #ececec;
+      border-radius:24px;
+      padding:18px 20px;
+      display:grid;
+      grid-template-columns:100px 1fr auto;
+      gap:18px;
+      align-items:center;
+      background:#fff;
+      transition:0.2s;
+    }
+
+    .history-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    }
+
+    .meal-emoji{
+      width:100px;
+      height:100px;
+      border-radius:20px;
+      background:#fff6f1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:48px;
+    }
+
+    .meal-info h3{
+      font-size:28px;
+      color:#333;
+      margin-bottom:8px;
+    }
+
+    .meal-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .meta-tag{
+      background:#f4f4f4;
+      color:#666;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .meal-info p{
+      font-size:16px;
+      color:#666;
+      line-height:1.6;
+    }
+
+    .meal-time{
+      font-size:15px;
+      color:#999;
+      text-align:right;
+      min-width:140px;
+    }
+
+    .empty-box{
+      text-align:center;
+      padding:80px 20px;
+      color:#777;
+      border:2px dashed #e3e3e3;
+      border-radius:28px;
+      background:#fafafa;
+    }
+
+    .empty-box h3{
+      font-size:30px;
+      margin-bottom:12px;
+      color:#444;
+    }
+
+    .empty-box p{
+      font-size:18px;
+      line-height:1.7;
+    }
+
+    .bottom-actions{
+      margin-top:28px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .action-btn{
+      border:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:20px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .back-btn{
+      background:#d67b49;
+      color:white;
+    }
+
+    .back-btn:hover{
+      background:#c16939;
+    }
+
+    .socials{
+      position:absolute;
+      right:22px;
+      bottom:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .social-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      text-decoration:none;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .phone-btn{ background:#25d366; }
+    .mail-btn{ background:#2563eb; }
+
+    @media (max-width: 860px){
+      .history-card{
+        grid-template-columns:1fr;
+      }
+
+      .meal-time{
+        text-align:left;
+      }
+
+      .searchbar{
+        display:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn" onclick="goHome()">หน้าหลัก</button>
+          <button type="button" class="nav-btn active">ประวัติการใช้งาน</button>
+          <button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="title-row">
+          <div>
+            <div class="page-title">เมนูของคุณ</div>
+            <div class="subtitle">รายการเมนูที่ระบบเคยแนะนำให้คุณล่าสุด</div>
+          </div>
+
+          <button class="clear-btn" onclick="clearHistory()">ล้างประวัติ</button>
+        </div>
+
+        <div id="historyContainer"></div>
+
+        <div class="bottom-actions">
+          <button class="action-btn back-btn" onclick="goHome()">กลับหน้าหลัก</button>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a class="social-icon phone-btn" href="tel:02462252257">☎</a>
+        <a class="social-icon mail-btn" href="mailto:mealdecider@example.com">✉</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getHistory() {
+      return JSON.parse(localStorage.getItem("mealHistory")) || [];
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      const container = document.getElementById("historyContainer");
+
+      if (history.length === 0) {
+        container.innerHTML = `
+          <div class="empty-box">
+            <h3>ยังไม่มีประวัติการสุ่มเมนู</h3>
+            <p>เมื่อคุณสุ่มเมนูแล้ว<br>เมนูที่ได้จะมาแสดงในหน้านี้</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="history-list">';
+
+      history.forEach(item => {
+        html += `
+          <div class="history-card">
+            <div class="meal-emoji">${item.emoji || "🍽️"}</div>
+
+            <div class="meal-info">
+              <h3>${item.name || "ไม่ทราบชื่อเมนู"}</h3>
+
+              <div class="meal-meta">
+                <span class="meta-tag">ประเภท: ${item.type || "-"}</span>
+                <span class="meta-tag">ราคา: ${item.price || "-"} บาท</span>
+                <span class="meta-tag">ความเผ็ด: ${item.spicy || "-"}</span>
+              </div>
+
+              <p>${item.detail || "ไม่มีรายละเอียดเมนู"}</p>
+            </div>
+
+            <div class="meal-time">${item.time || "-"}</div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function clearHistory() {
+      const ok = confirm("ต้องการล้างประวัติทั้งหมดหรือไม่");
+      if (ok) {
+        localStorage.removeItem("mealHistory");
+        renderHistory();
+      }
+    }
+
+    function goHome() {
+      window.location.href = "result.html";
+    }
+
+    function logout() {
+  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+  if (confirmLogout) {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInName");
+    window.location.href = "login.html";
+  }
+}
+
+    renderHistory();
+  </script>
+</body>
+</html>

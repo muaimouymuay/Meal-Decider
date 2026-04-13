@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - Result</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(90deg,#f06a00 0%, #d85a00 100%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .browser-frame{
+      width:1180px;
+      max-width:100%;
+      background:#8f4720;
+      border-radius:18px;
+      padding:18px 18px 24px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .dot{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .searchbar{
+      width:520px;
+      max-width:55%;
+      height:54px;
+      border-radius:14px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      color:#333;
+      font-size:28px;
+    }
+
+    .main-card{
+      background:#fff;
+      border-radius:32px;
+      overflow:hidden;
+      min-height:700px;
+      position:relative;
+    }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 26px;
+      border-bottom:1px solid #eee;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#8c5a46;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      background:#efefef;
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:18px;
+      color:#666;
+      cursor:pointer;
+    }
+
+    .nav-btn.active{
+      background:#e5e5e5;
+      font-weight:700;
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:28px;
+      padding:28px 30px 36px;
+      align-items:start;
+    }
+
+    .welcome-box{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:16px;
+    }
+
+    .avatar{
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      background:#8fd0ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:50px;
+      flex-shrink:0;
+    }
+
+    .welcome-text h2{
+      font-size:28px;
+      color:#333;
+      margin-bottom:6px;
+    }
+
+    .welcome-text p{
+      font-size:20px;
+      color:#666;
+    }
+
+    .recommend-tag{
+      display:inline-block;
+      background:#e86d6d;
+      color:#fff;
+      font-weight:800;
+      font-size:26px;
+      padding:16px 28px;
+      border-radius:24px;
+      margin:10px 0 8px 240px;
+    }
+
+    .dish-name-tag{
+      display:inline-block;
+      background:#f3e7ac;
+      color:#7a6231;
+      font-weight:800;
+      font-size:24px;
+      padding:12px 22px;
+      border-radius:999px;
+      margin-left:280px;
+      margin-bottom:12px;
+    }
+
+    .food-image-wrap{
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      margin-top:-20px;
+    }
+
+    .food-circle{
+      width:430px;
+      height:430px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#fffdf9,#f8f4ec);
+      border:8px solid #c8d5f5;
+      box-shadow:inset 0 0 0 8px #e9eefc;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:170px;
+    }
+
+    .dish-detail,
+    .pref-box{
+      margin-top:18px;
+      background:#fff7f1;
+      border:2px solid #f1d3be;
+      border-radius:18px;
+      padding:16px 18px;
+      color:#444;
+    }
+
+    .dish-detail p,
+    .pref-box p{
+      font-size:18px;
+      line-height:1.7;
+    }
+
+    .pref-box h3{
+      font-size:20px;
+      color:#555;
+      margin-bottom:10px;
+    }
+
+    .question-title{
+      font-size:52px;
+      font-weight:900;
+      color:#3f434a;
+      margin-bottom:26px;
+      margin-top:40px;
+    }
+
+    .action-btn{
+      width:100%;
+      border:none;
+      border-radius:999px;
+      padding:22px 24px;
+      font-size:26px;
+      font-weight:800;
+      color:#fff;
+      cursor:pointer;
+      margin-bottom:18px;
+    }
+
+    .orange-btn{
+      background:linear-gradient(90deg,#eca463,#d57b33);
+    }
+
+    .green-btn{
+      background:linear-gradient(90deg,#9ed66c,#72be55);
+    }
+
+    .blue-btn{
+      background:linear-gradient(90deg,#7ab6ff,#4c8ee8);
+    }
+
+    .sub-text{
+      text-align:center;
+      font-size:18px;
+      color:#9a5b5b;
+      margin-top:10px;
+    }
+
+    .socials{
+      position:absolute;
+      right:22px;
+      bottom:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .social-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      text-decoration:none;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .phone-btn{ background:#25d366; }
+    .mail-btn{ background:#2563eb; }
+
+    @media (max-width: 980px){
+      .content{
+        grid-template-columns:1fr;
+      }
+
+      .recommend-tag,
+      .dish-name-tag{
+        margin-left:0;
+      }
+.fav-btn{
+  border:none;
+  border-radius:999px;
+  padding:12px 20px;
+  font-size:18px;
+  font-weight:700;
+  background:#f7d9df;
+  color:#a43d57;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.fav-btn:hover{
+  background:#f3c5cf;
+}
+      .food-circle{
+        width:320px;
+        height:320px;
+        font-size:120px;
+      }
+
+      .question-title{
+        font-size:40px;
+        margin-top:0;
+      }
+    }
+
+    @media (max-width: 680px){
+      .searchbar{
+        display:none;
+      }
+
+      .food-circle{
+        width:280px;
+        height:280px;
+        font-size:100px;
+      }
+
+      .action-btn{
+        font-size:22px;
+        padding:18px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="searchbar">
+        <span>Decide less, enjoy more</span>
+        <span>×</span>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn active" onclick="goHome()">หน้าหลัก</button>
+<button type="button" class="nav-btn" onclick="goHistory()">ประวัติการใช้งาน</button>
+<button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="left-section">
+          <div class="welcome-box">
+            <div class="avatar">👨🏻</div>
+            <div class="welcome-text">
+              <h2>สวัสดีครับ!</h2>
+              <p>คุณสมชาย</p>
+            </div>
+          </div>
+
+          <div class="recommend-tag">อาหารที่เราแนะนำวันนี้</div><br>
+<div class="dish-name-tag" id="dishNameTag">กำลังสุ่มเมนู...</div>
+
+
+
+<div class="food-image-wrap">
+  <div class="food-circle" id="dishEmoji">🍽️</div>
+</div>
+          <div class="dish-detail">
+            <p id="dishDetail">ระบบกำลังวิเคราะห์เมนูจากความชอบของผู้ใช้</p>
+          </div>
+
+          <div class="pref-box">
+            <h3>ข้อมูลที่ใช้ตัดสินใจ</h3>
+            <p id="userPreferenceSummary">กำลังโหลดข้อมูล...</p>
+          </div>
+        </div>
+
+        <div class="right-section">
+          <div class="question-title">วันนี้กินอะไรดี ?</div>
+
+<button class="action-btn orange-btn" onclick="rerollMeal()">🎲 สุ่มเมนูใหม่</button>
+<button class="action-btn blue-btn" onclick="goNearby()">📍 ค้นหาร้านใกล้ฉัน</button>
+<button class="action-btn orange-btn" onclick="goFridge()">🧊 ดูเมนูจากวัตถุดิบ</button>
+<button class="action-btn green-btn" onclick="goSetPreference()">⚙️ ปรับความชอบใหม่</button>
+
+          <div class="sub-text">MealDecider จะแนะนำเมนูจากข้อมูลที่คุณเลือกในหน้าก่อนหน้า</div>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a class="social-icon phone-btn" href="tel:02462252257">☎</a>
+        <a class="social-icon mail-btn" href="mailto:mealdecider@example.com">✉</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem("isLogin") !== "true") {
+  window.location.href = "login.html";
+}
+function loadLoggedInUser() {
+  const savedName = localStorage.getItem("loggedInName");
+  const welcomeText = document.querySelector(".welcome-text p");
+
+  if (savedName && welcomeText) {
+    welcomeText.textContent = savedName;
+  }
+}
+loadLoggedInUser();
+    const meals = [
+      // ===== อาหารไทย =====
+{
+  name: "ข้าวไข่เจียว",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: [],
+  emoji: "🍳",
+  detail: "เมนูประหยัด กินง่าย เหมาะกับทุกเวลา"
+},
+{
+  name: "ข้าวหมูทอด",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "หมูทอดกรอบนอกนุ่มใน กินกับข้าวร้อน ๆ"
+},
+{
+  name: "ข้าวไก่ทอด",
+  type: "อาหารไทย",
+  spicy: "เผ็ดน้อย",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่ทอดกรอบ กินง่าย อิ่มเร็ว"
+},
+{
+  name: "ข้าวกะเพราหมู",
+  type: "อาหารไทย",
+  spicy: "เผ็ดปกติ",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍛",
+  detail: "เมนูยอดฮิต รสจัดจ้าน หาง่าย"
+},
+{
+  name: "ข้าวกะเพราไก่ไข่ดาว",
+  type: "อาหารไทย",
+  spicy: "เผ็ดปกติ",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍳",
+  detail: "เพิ่มไข่ดาวให้อิ่มมากขึ้น"
+},
+{
+  name: "ข้าวผัดหมู",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "เมนูคลาสสิก กินง่ายทุกวัย"
+},
+{
+  name: "ข้าวผัดไก่",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "ข้าวผัดหอม ๆ เหมาะกับมื้อเร่งรีบ"
+},
+{
+  name: "ข้าวผัดกระเทียมหมู",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🧄",
+  detail: "หอมกระเทียม กินง่าย ไม่เผ็ด"
+},
+{
+  name: "ข้าวคะน้าหมูกรอบ",
+  type: "อาหารไทย",
+  spicy: "เผ็ดน้อย",
+  price: 70,
+  avoidTags: [],
+  emoji: "🥬",
+  detail: "หมูกรอบกับผักคะน้า รสกลมกล่อม"
+},
+{
+  name: "ข้าวหมูผัดพริกแกง",
+  type: "อาหารไทย",
+  spicy: "เผ็ดปกติ",
+  price: 65,
+  avoidTags: [],
+  emoji: "🌶️",
+  detail: "เมนูรสเข้ม เหมาะกับคนชอบเผ็ด"
+},
+{
+  name: "ข้าวไข่พะโล้",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🥚",
+  detail: "รสหวานเค็ม กินง่าย ไม่เผ็ด"
+},
+{
+  name: "ข้าวหมูแดง",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "หมูแดงราดซอสหวาน อิ่มอร่อย"
+},
+{
+  name: "ข้าวมันไก่",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "เมนูยอดนิยม กินง่ายทุกวัย"
+},
+{
+  name: "ข้าวผัดน้ำพริกลงเรือ",
+  type: "อาหารไทย",
+  spicy: "เผ็ดปานกลาง",
+  price: 75,
+  avoidTags: [],
+  emoji: "🍛",
+  detail: "รสจัดแบบไทยแท้ กลมกล่อม"
+},
+{
+  name: "ข้าวหมูผัดน้ำมันหอย",
+  type: "อาหารไทย",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "รสหวานเค็ม กินง่าย ไม่จัดจ้าน"
+},
+// ===== ก๋วยเตี๋ยว =====
+{
+  name: "ก๋วยเตี๋ยวไก่ตุ๋น",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เมนูเส้นทานง่าย น้ำซุปกลมกล่อม อิ่มกำลังดี"
+},
+{
+  name: "ก๋วยเตี๋ยวหมูน้ำใส",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "น้ำซุปใส กินง่าย เหมาะกับวันที่อยากกินอะไรเบา ๆ"
+},
+{
+  name: "ก๋วยเตี๋ยวหมูต้มยำ",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดปานกลาง",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "รสจัดขึ้นอีกนิด เหมาะกับคนที่ชอบน้ำซุปรสเข้ม"
+},
+{
+  name: "เย็นตาโฟ",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดน้อย",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เมนูเส้นสีสันสดใส รสชาติเปรี้ยวหวานเค็มกลมกล่อม"
+},
+{
+  name: "บะหมี่หมูแดง",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เส้นบะหมี่กับหมูแดง หอมอร่อยและอิ่มกำลังดี"
+},
+{
+  name: "บะหมี่เกี๊ยวหมูแดง",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 65,
+  avoidTags: [],
+  emoji: "🥟",
+  detail: "ได้ทั้งบะหมี่และเกี๊ยวในชามเดียว คุ้มและอิ่ม"
+},
+{
+  name: "เส้นเล็กน้ำตกหมู",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดปกติ",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "น้ำซุปเข้มข้น เหมาะกับคนที่ชอบรสจัดขึ้น"
+},
+{
+  name: "เส้นใหญ่ราดหน้า",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 65,
+  avoidTags: [],
+  emoji: "🥢",
+  detail: "เส้นใหญ่เหนียวนุ่มกับน้ำราดข้น ๆ กินง่ายและอิ่ม"
+},
+{
+  name: "ผัดซีอิ๊วหมู",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🥡",
+  detail: "เมนูเส้นผัดยอดนิยม รสชาติไม่จัดเกินไป"
+},
+{
+  name: "สุกี้น้ำหมู",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดน้อย",
+  price: 60,
+  avoidTags: ["ผัก"],
+  emoji: "🍲",
+  detail: "น้ำซุปร้อน ๆ เหมาะกับคนที่อยากได้อะไรเบาแต่ยังอิ่ม"
+},
+{
+  name: "สุกี้แห้งไก่",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดน้อย",
+  price: 65,
+  avoidTags: ["ผัก"],
+  emoji: "🍲",
+  detail: "กินง่าย รสไม่หนัก และเหมาะกับมื้อกลางวัน"
+},
+{
+  name: "มาม่าต้มยำหมูสับ",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดปานกลาง",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เมนูประหยัด รสเข้มข้น และเป็นตัวเลือกที่คุ้นเคย"
+},
+{
+  name: "มาม่าน้ำใสหมูสับ",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "ไม่ใส่พริก",
+  price: 45,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เมนูง่าย ๆ ราคาเบา เหมาะกับวันที่งบน้อย"
+},
+{
+  name: "ก๋วยจั๊บน้ำข้น",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดน้อย",
+  price: 70,
+  avoidTags: ["เครื่องใน"],
+  emoji: "🍲",
+  detail: "น้ำซุปหอมพริกไทย ให้ความรู้สึกอุ่นท้อง"
+},
+{
+  name: "วุ้นเส้นต้มยำทะเล",
+  type: "ก๋วยเตี๋ยว",
+  spicy: "เผ็ดปานกลาง",
+  price: 75,
+  avoidTags: ["แพ้กุ้ง", "แพ้ปลา"],
+  emoji: "🍜",
+  detail: "เมนูเส้นรสจัดที่ได้ความสดจากทะเล"
+},
+// ===== ฟาสต์ฟู้ด =====
+{
+  name: "แฮมเบอร์เกอร์หมู",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍔",
+  detail: "เมนูง่าย อิ่มเร็ว เหมาะกับวันที่รีบ"
+},
+{
+  name: "แฮมเบอร์เกอร์ไก่",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍔",
+  detail: "ไก่กรอบนุ่ม กินง่ายและอิ่ม"
+},
+{
+  name: "ชีสเบอร์เกอร์",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 70,
+  avoidTags: ["ชีส"],
+  emoji: "🧀",
+  detail: "เพิ่มชีสเพิ่มความฟิน อิ่มแบบคุ้ม"
+},
+{
+  name: "เฟรนช์ฟรายส์",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍟",
+  detail: "ของกินเล่นยอดฮิต กินเพลิน"
+},
+{
+  name: "นักเก็ตไก่",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ชิ้นเล็กกินง่าย เหมาะแชร์กับเพื่อน"
+},
+{
+  name: "ไก่ทอด",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "เผ็ดน้อย",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "กรอบนอกนุ่มใน อิ่มแบบจัดเต็ม"
+},
+{
+  name: "ไก่ทอดเผ็ด",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "เผ็ดปกติ",
+  price: 75,
+  avoidTags: [],
+  emoji: "🌶️",
+  detail: "เพิ่มความเผ็ดสำหรับสายแซ่บ"
+},
+{
+  name: "พิซซ่าชีส",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 90,
+  avoidTags: ["ชีส"],
+  emoji: "🍕",
+  detail: "ชีสเยิ้ม ๆ ฟินง่ายในงบจำกัด"
+},
+{
+  name: "พิซซ่าฮาวายเอี้ยน",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 100,
+  avoidTags: [],
+  emoji: "🍍",
+  detail: "หวานเค็มผสมกัน กินง่ายไม่เลี่ยน"
+},
+{
+  name: "ฮอตดอก",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🌭",
+  detail: "กินง่าย พกพาสะดวก เหมาะกับมื้อเร่งด่วน"
+},
+{
+  name: "แซนวิชแฮมชีส",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: ["ชีส"],
+  emoji: "🥪",
+  detail: "เบา ๆ แต่ยังอิ่ม เหมาะมื้อเช้า"
+},
+{
+  name: "แซนวิชทูน่า",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🐟",
+  detail: "สุขภาพขึ้นมาหน่อย แต่ยังสะดวก"
+},
+{
+  name: "ข้าวไก่ทอด",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "เผ็ดน้อย",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "อิ่มจริงจังในราคานักศึกษา"
+},
+{
+  name: "ข้าวเบอร์เกอร์หมู",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "ไม่ใส่พริก",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍔",
+  detail: "ฟีลเบอร์เกอร์แต่กินแบบข้าว"
+},
+{
+  name: "มาม่าคัพ",
+  type: "ฟาสต์ฟู้ด",
+  spicy: "เผ็ดปานกลาง",
+  price: 45,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "ตัวเลือกสุดประหยัด เร็วและง่าย"
+},
+// ===== อาหารญี่ปุ่น =====
+{
+  name: "ข้าวหน้าหมูย่าง (บูตะด้ง)",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "หมูย่างซอสญี่ปุ่น หอมหวาน กินง่าย"
+},
+{
+  name: "ข้าวหน้าไก่เทริยากิ",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 75,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่นุ่มราดซอสเทริยากิ อิ่มแบบไม่เลี่ยน"
+},
+{
+  name: "ข้าวหน้าหมูทอด (ทงคัตสึ)",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 90,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "หมูทอดกรอบ กินกับข้าวร้อน ๆ ฟินมาก"
+},
+{
+  name: "ข้าวหน้าไก่ทอด",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 85,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่กรอบสไตล์ญี่ปุ่น อิ่มคุ้ม"
+},
+{
+  name: "ราเมงหมู",
+  type: "อาหารญี่ปุ่น",
+  spicy: "เผ็ดน้อย",
+  price: 95,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เส้นนุ่ม น้ำซุปเข้มข้น กินแล้วอุ่นใจ"
+},
+{
+  name: "ราเมงต้มยำ",
+  type: "อาหารญี่ปุ่น",
+  spicy: "เผ็ดปานกลาง",
+  price: 90,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "ฟิวชั่นญี่ปุ่น+ไทย รสจัดขึ้น"
+},
+{
+  name: "ซูชิรวม",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 80,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🍣",
+  detail: "หลากหลายคำ กินเพลิน"
+},
+{
+  name: "ซูชิปูอัด",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: [],
+  emoji: "🦀",
+  detail: "เมนูเบา ๆ ราคาประหยัด"
+},
+{
+  name: "ซูชิไข่หวาน",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: ["ไข่"],
+  emoji: "🍳",
+  detail: "รสหวาน กินง่าย ไม่หนัก"
+},
+{
+  name: "ข้าวปั้น (โอนิกิริ)",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍙",
+  detail: "พกง่าย กินสะดวก"
+},
+{
+  name: "ข้าวแกงกะหรี่หมู",
+  type: "อาหารญี่ปุ่น",
+  spicy: "เผ็ดน้อย",
+  price: 85,
+  avoidTags: [],
+  emoji: "🍛",
+  detail: "แกงกะหรี่หอม ๆ อิ่มแบบนุ่มนวล"
+},
+{
+  name: "ข้าวแกงกะหรี่ไก่",
+  type: "อาหารญี่ปุ่น",
+  spicy: "เผ็ดน้อย",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍛",
+  detail: "เมนูยอดฮิต กินง่ายทุกวัย"
+},
+{
+  name: "ยากิโซบะ",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 75,
+  avoidTags: [],
+  emoji: "🥡",
+  detail: "เส้นผัดซอสญี่ปุ่น หอมและอิ่ม"
+},
+{
+  name: "ทาโกะยากิ",
+  type: "อาหารญี่ปุ่น",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: ["แพ้กุ้ง"],
+  emoji: "🐙",
+  detail: "ของกินเล่นยอดฮิต สายญี่ปุ่นต้องชอบ"
+},
+{
+  name: "ไก่คาราเกะ",
+  type: "อาหารญี่ปุ่น",
+  spicy: "เผ็ดน้อย",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่ทอดสไตล์ญี่ปุ่น กรอบนอกนุ่มใน"
+},
+// ===== อาหารคลีน / สุขภาพ =====
+{
+  name: "สลัดอกไก่",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 80,
+  avoidTags: ["ผัก"],
+  emoji: "🥗",
+  detail: "เมนูยอดนิยมสำหรับสายเฮลตี้ โปรตีนสูง ไขมันต่ำ"
+},
+{
+  name: "ข้าวอกไก่ย่าง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 75,
+  avoidTags: [],
+  emoji: "🍱",
+  detail: "อิ่มง่าย ได้โปรตีน เหมาะกับมื้อหลัก"
+},
+{
+  name: "ข้าวปลาเผา",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 90,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🐟",
+  detail: "โปรตีนสูง ไขมันต่ำ เหมาะกับคนรักสุขภาพ"
+},
+{
+  name: "โยเกิร์ตผลไม้",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍓",
+  detail: "มื้อเบา สดชื่น และดีต่อระบบย่อย"
+},
+{
+  name: "แซนวิชอกไก่",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 65,
+  avoidTags: [],
+  emoji: "🥪",
+  detail: "กินง่าย เหมาะกับมื้อเช้าหรือเร่งรีบ"
+},
+{
+  name: "ข้าวกล้องไก่ย่าง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 85,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "ไฟเบอร์สูง อิ่มนาน เหมาะกับสายคุมอาหาร"
+},
+{
+  name: "สลัดทูน่า",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 75,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🐟",
+  detail: "โปรตีนดี ไขมันต่ำ กินแล้วไม่หนักท้อง"
+},
+{
+  name: "ไข่ต้ม + ข้าวกล้อง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: ["ไข่"],
+  emoji: "🥚",
+  detail: "เมนูง่าย ๆ แต่ได้สารอาหารครบ"
+},
+{
+  name: "ข้าวปลาแซลมอนย่าง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 100,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🍣",
+  detail: "โอเมก้า 3 สูง เหมาะกับสายเฮลตี้จริงจัง"
+},
+{
+  name: "อกไก่นึ่ง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "คลีนสุด ๆ โปรตีนล้วน เหมาะกับคนลดน้ำหนัก"
+},
+{
+  name: "สลัดไข่ต้ม",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 65,
+  avoidTags: ["ไข่"],
+  emoji: "🥗",
+  detail: "โปรตีน + ไฟเบอร์ ครบในจานเดียว"
+},
+{
+  name: "ข้าวกล้องหมูย่าง",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "เผ็ดน้อย",
+  price: 85,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "หมูย่างแบบคลีน ลดมัน อิ่มกำลังดี"
+},
+{
+  name: "ผลไม้รวม",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍉",
+  detail: "สดชื่น เหมาะกับมื้อเบาหรือของว่าง"
+},
+{
+  name: "น้ำเต้าหู้",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: ["แพ้ถั่ว"],
+  emoji: "🥛",
+  detail: "เครื่องดื่มสุขภาพ ย่อยง่าย"
+},
+{
+  name: "สลัดโรล",
+  type: "อาหารคลีน/สุขภาพ",
+  spicy: "ไม่ใส่พริก",
+  price: 70,
+  avoidTags: ["ผัก"],
+  emoji: "🥗",
+  detail: "เมนูคลีนยอดนิยม กินง่ายและสดชื่น"
+},
+// ===== อาหารอีสาน =====
+{
+  name: "ส้มตำไทย",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 50,
+  avoidTags: [],
+  emoji: "🥗",
+  detail: "รสเปรี้ยวหวาน กินง่าย เหมาะกับทุกคน"
+},
+{
+  name: "ส้มตำปลาร้า",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดมาก",
+  price: 55,
+  avoidTags: ["ปลาร้า"],
+  emoji: "🌶️",
+  detail: "สายแซ่บต้องลอง รสจัดเต็ม"
+},
+{
+  name: "ส้มตำไข่เค็ม",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปานกลาง",
+  price: 60,
+  avoidTags: ["ไข่"],
+  emoji: "🥚",
+  detail: "เพิ่มความมันด้วยไข่เค็ม อร่อยกลมกล่อม"
+},
+{
+  name: "ลาบหมู",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปกติ",
+  price: 65,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "เมนูยอดนิยม รสจัด หอมข้าวคั่ว"
+},
+{
+  name: "ลาบไก่",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปกติ",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "โปรตีนสูง กินกับข้าวเหนียวเข้ากันมาก"
+},
+{
+  name: "น้ำตกหมู",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปกติ",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "รสเข้มข้น หอมสมุนไพร"
+},
+{
+  name: "ไก่ย่าง",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "หนังกรอบ เนื้อนุ่ม กินคู่ข้าวเหนียว"
+},
+{
+  name: "คอหมูย่าง",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 90,
+  avoidTags: [],
+  emoji: "🍖",
+  detail: "หมูย่างหอม ๆ จิ้มแจ่วฟินสุด"
+},
+{
+  name: "ข้าวเหนียว",
+  type: "อาหารอีสาน",
+  spicy: "ไม่ใส่พริก",
+  price: 15,
+  avoidTags: [],
+  emoji: "🍚",
+  detail: "กินคู่เมนูอีสาน อิ่มและคุ้ม"
+},
+{
+  name: "ต้มแซ่บกระดูกหมู",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปานกลาง",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍲",
+  detail: "ซุปแซ่บ เปรี้ยวเผ็ด อุ่นท้อง"
+},
+{
+  name: "ต้มแซ่บไก่",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปานกลาง",
+  price: 65,
+  avoidTags: [],
+  emoji: "🍲",
+  detail: "รสจัดกำลังดี กินแล้วสดชื่น"
+},
+{
+  name: "ยำวุ้นเส้น",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 60,
+  avoidTags: ["แพ้กุ้ง"],
+  emoji: "🥗",
+  detail: "เมนูเบา แต่รสชาติครบ"
+},
+{
+  name: "ยำหมูยอ",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดปานกลาง",
+  price: 65,
+  avoidTags: [],
+  emoji: "🥩",
+  detail: "รสจัด หอมเครื่องยำ"
+},
+{
+  name: "ตำแตง",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 45,
+  avoidTags: [],
+  emoji: "🥒",
+  detail: "เบากว่าส้มตำ กินง่าย สดชื่น"
+},
+{
+  name: "ตำข้าวโพด",
+  type: "อาหารอีสาน",
+  spicy: "เผ็ดน้อย",
+  price: 55,
+  avoidTags: [],
+  emoji: "🌽",
+  detail: "หวานนิด ๆ เปรี้ยวหน่อย กินเพลิน"
+},
+// ===== ของหวาน =====
+{
+  name: "ไอศกรีมถ้วย",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍨",
+  detail: "ของหวานเบา ๆ เย็นสดชื่น"
+},
+{
+  name: "ไอศกรีมโคน",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 30,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍦",
+  detail: "กินง่าย ราคาประหยัด เหมาะกับวันร้อน ๆ"
+},
+{
+  name: "บิงซู",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 90,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍧",
+  detail: "ของหวานเกาหลี เย็นหวานสดชื่น"
+},
+{
+  name: "เครปเค้ก",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 95,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍰",
+  detail: "เนื้อนุ่ม หวานกำลังดี"
+},
+{
+  name: "บราวนี่",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍫",
+  detail: "เข้มข้น เหมาะกับสายช็อกโกแลต"
+},
+{
+  name: "บราวนี่ไอศกรีม",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 85,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍫",
+  detail: "หวานเย็นผสมกัน อร่อยลงตัว"
+},
+{
+  name: "ฮันนี่โทสต์",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 100,
+  avoidTags: ["แพ้นม"],
+  emoji: "🍞",
+  detail: "ขนมปังกรอบนอกนุ่มใน ราดน้ำผึ้ง"
+},
+{
+  name: "แพนเค้ก",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 70,
+  avoidTags: ["แพ้นม"],
+  emoji: "🥞",
+  detail: "เมนูนุ่มฟู หวานเบา ๆ"
+},
+{
+  name: "วาฟเฟิล",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 60,
+  avoidTags: ["แพ้นม"],
+  emoji: "🧇",
+  detail: "กรอบนอกนุ่มใน กินเพลิน"
+},
+{
+  name: "ขนมปังปิ้ง",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: [],
+  emoji: "🍞",
+  detail: "ของหวานง่าย ๆ ราคาประหยัด"
+},
+{
+  name: "ขนมปังสังขยา",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 45,
+  avoidTags: ["ไข่"],
+  emoji: "🍞",
+  detail: "หอมหวานแบบไทย ๆ"
+},
+{
+  name: "เต้าฮวย",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: ["แพ้ถั่ว"],
+  emoji: "🍮",
+  detail: "นุ่ม ละมุน ย่อยง่าย"
+},
+{
+  name: "เฉาก๊วย",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 35,
+  avoidTags: [],
+  emoji: "🧊",
+  detail: "เย็นสดชื่น เหมาะกับอากาศร้อน"
+},
+{
+  name: "ผลไม้รวม",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍉",
+  detail: "หวานธรรมชาติ ดีต่อสุขภาพ"
+},
+{
+  name: "กล้วยทอด",
+  type: "ของหวาน",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: [],
+  emoji: "🍌",
+  detail: "ของหวานไทย กรอบนอกนุ่มใน"
+},
+// ===== ฮาลาล =====
+{
+  name: "ข้าวหมกไก่",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍛",
+  detail: "เมนูฮาลาลยอดนิยม กลิ่นหอมและอิ่มท้อง"
+},
+{
+  name: "ข้าวมันไก่ฮาลาล",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 55,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "กินง่าย อิ่มเร็ว และเหมาะกับทุกช่วงเวลา"
+},
+{
+  name: "ไก่ทอดฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 70,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่ทอดกรอบนอกนุ่มใน ราคาเข้าถึงง่าย"
+},
+{
+  name: "โรตีแกงไก่",
+  type: "ฮาลาล",
+  spicy: "เผ็ดปานกลาง",
+  price: 65,
+  avoidTags: [],
+  emoji: "🥙",
+  detail: "โรตีหอม ๆ กินคู่แกงไก่รสเข้มข้น"
+},
+{
+  name: "โรตีไข่",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 40,
+  avoidTags: ["ไข่"],
+  emoji: "🥙",
+  detail: "เมนูง่าย ๆ กินอร่อยและอยู่ท้อง"
+},
+{
+  name: "โรตีนม",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 35,
+  avoidTags: ["แพ้นม"],
+  emoji: "🥙",
+  detail: "ของหวานฮาลาล กินเล่นก็ได้ กินจริงก็อร่อย"
+},
+{
+  name: "ก๋วยเตี๋ยวไก่ฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 60,
+  avoidTags: [],
+  emoji: "🍜",
+  detail: "เมนูเส้นสำหรับคนที่ต้องการตัวเลือกฮาลาล"
+},
+{
+  name: "ข้าวไก่ย่างฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 75,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่ย่างหอม ๆ กินกับข้าวร้อน ๆ อิ่มกำลังดี"
+},
+{
+  name: "เบอร์เกอร์ไก่ฮาลาล",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍔",
+  detail: "เมนูฮาลาลสไตล์ฟาสต์ฟู้ด กินง่าย"
+},
+{
+  name: "ข้าวเนื้อย่างฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดปกติ",
+  price: 90,
+  avoidTags: [],
+  emoji: "🥩",
+  detail: "เหมาะกับคนที่อยากได้โปรตีนมากขึ้น"
+},
+{
+  name: "ซุปไก่ฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 50,
+  avoidTags: [],
+  emoji: "🍲",
+  detail: "เมนูน้ำร้อน ๆ ซดคล่องคอ"
+},
+{
+  name: "ข้าวไข่เจียวฮาลาล",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 45,
+  avoidTags: ["ไข่"],
+  emoji: "🍳",
+  detail: "เมนูประหยัด เหมาะกับวันที่อยากกินง่าย ๆ"
+},
+{
+  name: "ชาชัก",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 35,
+  avoidTags: ["แพ้นม"],
+  emoji: "🥤",
+  detail: "เครื่องดื่มยอดนิยม หอมหวาน ดื่มง่าย"
+},
+{
+  name: "ข้าวปลาอบฮาลาล",
+  type: "ฮาลาล",
+  spicy: "ไม่ใส่พริก",
+  price: 85,
+  avoidTags: ["แพ้ปลา"],
+  emoji: "🐟",
+  detail: "ตัวเลือกฮาลาลที่ดูเบาและสุขภาพขึ้น"
+},
+{
+  name: "ข้าวไก่กรอบซอสฮาลาล",
+  type: "ฮาลาล",
+  spicy: "เผ็ดน้อย",
+  price: 80,
+  avoidTags: [],
+  emoji: "🍗",
+  detail: "ไก่กรอบราดซอส กินง่ายและอิ่ม"
+}
+    ];
+
+    const priceRanges = {
+      "ต่ำกว่า 50 บาท": [0, 49],
+      "50-100 บาท": [50, 100],
+      "100-150 บาท": [100, 150],
+      "150-300 บาท": [150, 300],
+      "300-400 บาท": [300, 400]
+    };
+
+    let filteredMeals = [];
+    let currentMeal = null;
+
+    function getUserSelections() {
+      const raw = localStorage.getItem("mealDeciderSelections");
+      if (!raw) {
+        return {
+          favoriteFoods: [],
+          avoidFoods: [],
+          spicyLevel: "",
+          budget: ""
+        };
+      }
+      return JSON.parse(raw);
+    }
+
+    function filterMeals() {
+  const selections = getUserSelections();
+
+  const favoriteFoods = selections.favoriteFoods || [];
+  const avoidFoods = selections.avoidFoods || [];
+  const spicyLevel = selections.spicyLevel || "";
+  const budget = selections.budget || "";
+
+  function inBudget(meal) {
+    if (!budget || !priceRanges[budget]) return true;
+    const [min, max] = priceRanges[budget];
+    return meal.price >= min && meal.price <= max;
+  }
+
+  function notAvoided(meal) {
+    if (avoidFoods.length === 0) return true;
+    return !avoidFoods.some(item => meal.avoidTags.includes(item));
+  }
+
+  function matchFavorite(meal) {
+    if (favoriteFoods.length === 0) return true;
+    return favoriteFoods.includes(meal.type);
+  }
+
+  function matchSpicy(meal) {
+    if (!spicyLevel) return true;
+    return meal.spicy === spicyLevel;
+  }
+
+  // ระดับที่ 1: ตรงทุกเงื่อนไข
+  let result = meals.filter(meal =>
+    matchFavorite(meal) &&
+    notAvoided(meal) &&
+    matchSpicy(meal) &&
+    inBudget(meal)
+  );
+
+  // ระดับที่ 2: ถ้าไม่เจอ ผ่อน "ความเผ็ด" ออกก่อน
+  if (result.length === 0) {
+    result = meals.filter(meal =>
+      matchFavorite(meal) &&
+      notAvoided(meal) &&
+      inBudget(meal)
+    );
+  }
+
+  // ระดับที่ 3: ถ้าไม่เจออีก ให้เหลืออย่างน้อยประเภทอาหารที่ชอบ
+  if (result.length === 0) {
+    result = meals.filter(meal => matchFavorite(meal));
+  }
+
+  // ระดับที่ 4: ถ้าไม่ได้เลือกประเภทอาหารเลย ค่อยใช้ทั้งหมด
+  if (result.length === 0) {
+    result = meals;
+  }
+
+  filteredMeals = result;
+}
+
+    function pickRandomMeal() {
+      if (filteredMeals.length === 0) return null;
+      const index = Math.floor(Math.random() * filteredMeals.length);
+      return filteredMeals[index];
+    }
+
+   function showMeal(meal) {
+  if (!meal) return;
+
+  document.getElementById("dishNameTag").textContent = meal.name;
+  document.getElementById("dishEmoji").textContent = meal.emoji;
+  document.getElementById("dishDetail").textContent =
+    meal.detail + " | ราคาโดยประมาณ " + meal.price + " บาท | ระดับความเผ็ด: " + meal.spicy;
+
+  saveToHistory(meal);
+}
+function saveToHistory(meal) {
+  let history = JSON.parse(localStorage.getItem("mealHistory")) || [];
+
+  const latestItem = history[0];
+  if (latestItem && latestItem.name === meal.name) {
+    return;
+  }
+
+  const historyItem = {
+    name: meal.name,
+    type: meal.type,
+    price: meal.price,
+    spicy: meal.spicy,
+    emoji: meal.emoji,
+    detail: meal.detail,
+    time: new Date().toLocaleString("th-TH")
+  };
+function saveToHistory(meal) {
+  const historyItem = {
+    type: meal.type,
+    price: meal.price,
+    spicy: meal.spicy,
+    emoji: meal.emoji,
+    detail: meal.detail,
+    time: new Date().toLocaleString("th-TH")
+  };
+
+  let history = JSON.parse(localStorage.getItem("mealHistory")) || [];
+
+  history.unshift(historyItem);
+
+  if (history.length > 20) {
+    history = history.slice(0, 20);
+  }
+function addToFavorites() {
+  if (!currentMeal) return;
+
+  let favs = JSON.parse(localStorage.getItem("favorites")) || [];
+
+  const exists = favs.find(f => f.name === currentMeal.name);
+  if (!exists) {
+    favs.push(currentMeal);
+    localStorage.setItem("favorites", JSON.stringify(favs));
+  }
+
+  window.location.href = "favorites.html";
+}
+  localStorage.setItem("mealHistory", JSON.stringify(history));
+}
+  history.unshift(historyItem);
+
+  if (history.length > 20) {
+    history = history.slice(0, 20);
+  }
+
+  localStorage.setItem("mealHistory", JSON.stringify(history));
+}
+    function showPreferenceSummary() {
+      const s = getUserSelections();
+
+      const foods = s.favoriteFoods && s.favoriteFoods.length ? s.favoriteFoods.join(", ") : "ไม่ได้ระบุ";
+      const avoid = s.avoidFoods && s.avoidFoods.length ? s.avoidFoods.join(", ") : "ไม่มี";
+      const spicy = s.spicyLevel || "ไม่ได้ระบุ";
+      const budget = s.budget || "ไม่ได้ระบุ";
+
+      document.getElementById("userPreferenceSummary").textContent =
+        "ประเภทอาหารที่ชอบ: " + foods +
+        " | อาหารที่ไม่ทาน/แพ้: " + avoid +
+        " | ระดับความเผ็ด: " + spicy +
+        " | งบประมาณ: " + budget;
+    }
+
+    function rerollMeal() {
+  document.getElementById("dishNameTag").textContent = "กำลังสุ่มเมนู...";
+  document.getElementById("dishEmoji").textContent = "⏳";
+  document.getElementById("dishDetail").textContent = "ระบบกำลังเลือกเมนูที่เหมาะกับคุณ";
+
+  setTimeout(() => {
+    currentMeal = pickRandomMeal();
+
+    if (!currentMeal) {
+      document.getElementById("dishNameTag").textContent = "ไม่พบเมนู";
+      document.getElementById("dishEmoji").textContent = "😢";
+      document.getElementById("dishDetail").textContent = "ลองเปลี่ยนเงื่อนไขใหม่อีกครั้ง";
+      return;
+    }
+
+    showMeal(currentMeal);
+  }, 800);
+}
+
+    function goNearby() {
+      window.open("https://www.google.com/maps/search/ร้านอาหารใกล้ฉัน", "_blank");
+    }
+
+    function goSetPreference() {
+      window.location.href = "home.html";
+    }
+
+    function goHome() {
+      window.location.href = "result.html";
+    }
+
+    function goFridge() {
+        window.location.href = "fridge.html";
+    }
+
+    function goHistory() {
+      window.location.href = "history.html";
+    }
+    function logout() {
+  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+  if (confirmLogout) {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInName");
+    window.location.href = "login.html";
+  }
+}
+    function goFav() {
+  window.location.href = "favorites.html";
+}
+
+    filterMeals();
+showPreferenceSummary();
+currentMeal = pickRandomMeal();
+
+if (!currentMeal) {
+  document.getElementById("dishNameTag").textContent = "ไม่พบเมนู";
+  document.getElementById("dishEmoji").textContent = "😢";
+  document.getElementById("dishDetail").textContent = "ยังไม่มีเมนูที่ตรงกับเงื่อนไข ลองเลือกใหม่";
+} else {
+  showMeal(currentMeal);
+}
+  </script>
+</body>
+</html>

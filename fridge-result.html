@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - Fridge Result</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(90deg,#f06a00 0%,#d85a00 100%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .browser-frame{
+      width:1180px;
+      max-width:100%;
+      background:#8f4720;
+      border-radius:18px;
+      padding:18px 18px 24px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .dot{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .searchbar{
+      width:520px;
+      max-width:55%;
+      height:54px;
+      border-radius:14px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      color:#333;
+      font-size:28px;
+    }
+
+    .main-card{
+      background:#fff;
+      border-radius:32px;
+      overflow:hidden;
+      min-height:700px;
+      position:relative;
+    }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 26px;
+      border-bottom:1px solid #eee;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#8c5a46;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      background:#efefef;
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:18px;
+      color:#666;
+      cursor:pointer;
+    }
+
+    .nav-btn.active{
+      background:#e5e5e5;
+      font-weight:700;
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns:340px 1fr;
+      gap:26px;
+      padding:26px 30px 34px;
+    }
+
+    .left-panel{
+      background:#f5fbff;
+      border-radius:28px;
+      padding:24px 20px;
+      min-height:520px;
+    }
+
+    .left-panel h2{
+      font-size:32px;
+      color:#333;
+      margin-bottom:10px;
+      text-align:center;
+    }
+
+    .left-panel p{
+      color:#666;
+      font-size:18px;
+      text-align:center;
+      margin-bottom:18px;
+    }
+
+    .ingredient-list{
+      margin-top:18px;
+    }
+
+    .ingredient-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid #e5e5e5;
+      font-size:18px;
+      color:#444;
+    }
+
+    .right-panel h1{
+      font-size:34px;
+      color:#333;
+      margin-bottom:12px;
+    }
+
+    .right-panel h3{
+      font-size:22px;
+      color:#444;
+      margin-bottom:14px;
+    }
+
+    .ingredient-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:24px;
+    }
+
+    .tag{
+      background:#ededed;
+      border-radius:12px;
+      padding:10px 16px;
+      font-size:18px;
+      color:#555;
+    }
+
+    .recipe-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .recipe-card{
+      display:grid;
+      grid-template-columns:160px 1fr 120px;
+      gap:18px;
+      align-items:center;
+      border:2px solid #e6e6e6;
+      border-radius:26px;
+      padding:16px;
+      background:#fff;
+    }
+
+    .recipe-img{
+      width:160px;
+      height:120px;
+      border-radius:18px;
+      background:#f7efe8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:54px;
+    }
+
+    .recipe-info h4{
+      font-size:28px;
+      color:#333;
+      margin-bottom:8px;
+    }
+
+    .recipe-info p{
+      font-size:17px;
+      color:#666;
+      line-height:1.6;
+      margin-bottom:8px;
+    }
+
+    .match-badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .badge-good{
+      background:#dff5d3;
+      color:#2f6b1f;
+    }
+
+    .badge-mid{
+      background:#fff1cc;
+      color:#8a6a00;
+    }
+
+    .badge-low{
+      background:#f3f3f3;
+      color:#666;
+    }
+
+    .small-note{
+      font-size:15px;
+      color:#777;
+    }
+
+    .recipe-actions{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-size:18px;
+      color:#666;
+      text-align:center;
+    }
+
+    .recipe-actions .percent{
+      font-size:24px;
+      font-weight:800;
+      color:#d67b49;
+    }
+
+    .bottom-actions{
+      margin-top:24px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .action-btn{
+      border:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:20px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .back-btn{
+      background:#efefef;
+      color:#666;
+    }
+
+    .orange-btn{
+      background:#d67b49;
+      color:white;
+    }
+
+    .socials{
+      position:absolute;
+      right:22px;
+      bottom:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .social-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      text-decoration:none;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .phone-btn{ background:#25d366; }
+    .mail-btn{ background:#2563eb; }
+
+    @media (max-width: 980px){
+      .content{
+        grid-template-columns:1fr;
+      }
+
+      .recipe-card{
+        grid-template-columns:1fr;
+      }
+
+      .recipe-img{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="searchbar">
+        <span>Decide less, enjoy more</span>
+        <span>×</span>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn active" onclick="goHome()">หน้าหลัก</button>
+          <button type="button" class="nav-btn" onclick="goHistory()">ประวัติการใช้งาน</button>
+          <button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="left-panel">
+          <h2>My Pantry</h2>
+          <p id="ingredientCount">You have 0 ingredients</p>
+          <div class="ingredient-list" id="ingredientList"></div>
+        </div>
+
+        <div class="right-panel">
+          <h1 id="recipeCountTitle">Recommended recipes for you</h1>
+          <h3>วัตถุดิบที่คุณมี</h3>
+          <div class="ingredient-tags" id="ingredientTags"></div>
+
+          <div class="recipe-list" id="recipeList"></div>
+
+          <div class="bottom-actions">
+            <button class="action-btn back-btn" onclick="goBack()">กลับไปเลือกวัตถุดิบ</button>
+            <button class="action-btn orange-btn" onclick="goResult()">กลับหน้าผลลัพธ์หลัก</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a class="social-icon phone-btn" href="tel:02462252257">☎</a>
+        <a class="social-icon mail-btn" href="mailto:mealdecider@example.com">✉</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const recipes = [
+      {
+        name: "ข้าวผัดไข่",
+        emoji: "🍳",
+        ingredients: ["ไข่", "ข้าวสาร", "ซอสปรุงรส"],
+        detail: "เมนูพื้นฐานที่ทำง่ายและใช้วัตถุดิบไม่เยอะ"
+      },
+      {
+        name: "ไข่เจียว",
+        emoji: "🍳",
+        ingredients: ["ไข่", "น้ำปลา"],
+        detail: "เมนูง่ายที่สุด ใช้เวลาไม่นาน"
+      },
+      {
+        name: "ไข่คนชีส",
+        emoji: "🧀",
+        ingredients: ["ไข่", "ชีส", "เนย"],
+        detail: "นุ่ม หอม มัน กินง่าย"
+      },
+      {
+        name: "ขนมปังชุบไข่",
+        emoji: "🍞",
+        ingredients: ["ไข่", "ขนมปัง", "นม"],
+        detail: "เมนูทำง่าย หอม นุ่ม เหมาะเป็นมื้อเช้าหรือของว่าง"
+      },
+      {
+        name: "แซนด์วิชไข่",
+        emoji: "🥪",
+        ingredients: ["ไข่", "ขนมปัง", "มายองเนส"],
+        detail: "เมนูง่าย เร็ว และอิ่ม"
+      },
+      {
+        name: "นมสตรอว์เบอร์รีปั่น",
+        emoji: "🍓",
+        ingredients: ["นม", "สตรอว์เบอร์รี"],
+        detail: "เครื่องดื่มหวานสดชื่น ทำง่ายมาก"
+      },
+      {
+        name: "โยเกิร์ตสตรอว์เบอร์รี",
+        emoji: "🍓",
+        ingredients: ["โยเกิร์ต", "สตรอว์เบอร์รี"],
+        detail: "ของว่างเบา ๆ สำหรับสายสุขภาพ"
+      },
+      {
+        name: "โทสต์เนยนม",
+        emoji: "🍞",
+        ingredients: ["ขนมปัง", "เนย", "นม"],
+        detail: "ขนมปังอบหอม ๆ กินง่ายและอร่อย"
+      },
+      {
+        name: "ขนมปังเนยน้ำตาล",
+        emoji: "🍞",
+        ingredients: ["ขนมปัง", "เนย", "น้ำตาล"],
+        detail: "เมนูง่ายที่สุดเมื่ออยากกินอะไรหวาน ๆ"
+      },
+      {
+        name: "กล้วยนมปั่น",
+        emoji: "🍌",
+        ingredients: ["กล้วย", "นม"],
+        detail: "เครื่องดื่มอิ่มท้อง ทำง่าย"
+      },
+      {
+        name: "มาม่าผัดไข่",
+        emoji: "🍜",
+        ingredients: ["ไข่", "เส้นมาม่า", "ซอสปรุงรส"],
+        detail: "เมนูประหยัด ทำง่าย อิ่มเร็ว"
+      },
+      {
+        name: "พาสต้าเนยกระเทียม",
+        emoji: "🍝",
+        ingredients: ["เส้นพาสต้า", "เนย", "กระเทียม"],
+        detail: "เมนูเส้นง่าย ๆ กลิ่นหอมมาก"
+      },
+      {
+        name: "ไก่ผัดกระเทียม",
+        emoji: "🍗",
+        ingredients: ["ไก่", "กระเทียม", "ซอสปรุงรส"],
+        detail: "เมนูคาวกินง่าย รสชาติคุ้นเคย"
+      },
+      {
+        name: "หมูทอดกระเทียม",
+        emoji: "🍖",
+        ingredients: ["หมู", "กระเทียม", "ซอสปรุงรส"],
+        detail: "เมนูยอดนิยม ทำไม่ยาก"
+      },
+      {
+        name: "แซลมอนย่าง",
+        emoji: "🍣",
+        ingredients: ["แซลมอน", "พริกไทย", "น้ำมันมะกอก"],
+        detail: "เมนูเฮลตี้ ทำง่ายและดูพรีเมียม"
+      },
+      {
+        name: "ปลาอบเนย",
+        emoji: "🐟",
+        ingredients: ["ปลา", "เนย", "พริกไทย"],
+        detail: "เหมาะกับคนที่อยากกินอะไรเบาแต่ดูดี"
+      },
+      {
+        name: "ทูน่าแซนด์วิช",
+        emoji: "🥪",
+        ingredients: ["ทูน่า", "ขนมปัง", "มายองเนส"],
+        detail: "เหมาะกับมื้อเร่งด่วน"
+      },
+      {
+        name: "สลัดอกไก่",
+        emoji: "🥗",
+        ingredients: ["อกไก่", "ผักกาด", "มะเขือเทศ"],
+        detail: "เมนูสุขภาพ โปรตีนสูง"
+      },
+      {
+        name: "สลัดแตงกวา",
+        emoji: "🥒",
+        ingredients: ["แตงกวา", "มะเขือเทศ", "น้ำมันมะกอก"],
+        detail: "เมนูสดชื่น ทำง่าย"
+      },
+      {
+        name: "ข้าวไข่คน",
+        emoji: "🍚",
+        ingredients: ["ไข่", "เนย", "ข้าวสาร"],
+        detail: "มื้อเรียบง่าย แต่อร่อยและอิ่ม"
+      },
+      // ===== เมนูคาวเพิ่ม =====
+{
+  name: "ข้าวผัดกระเทียม",
+  emoji: "🍚",
+  ingredients: ["ข้าวสาร", "กระเทียม", "ซอสปรุงรส"],
+  detail: "เมนูง่าย ๆ หอมกระเทียม กินได้ทุกเวลา"
+},
+{
+  name: "ข้าวผัดเบคอน",
+  emoji: "🥓",
+  ingredients: ["ข้าวสาร", "เบคอน", "ไข่"],
+  detail: "เมนูอิ่มท้อง รสชาติเข้มขึ้นจากเบคอน"
+},
+{
+  name: "ข้าวผัดหมู",
+  emoji: "🍖",
+  ingredients: ["ข้าวสาร", "หมู", "ไข่"],
+  detail: "เมนูคุ้นเคย ทำง่าย และอิ่มจริง"
+},
+{
+  name: "ข้าวผัดไก่",
+  emoji: "🍗",
+  ingredients: ["ข้าวสาร", "ไก่", "ไข่"],
+  detail: "เหมาะกับวัตถุดิบพื้นฐานที่มีติดบ้าน"
+},
+{
+  name: "ข้าวไข่ข้น",
+  emoji: "🍳",
+  ingredients: ["ข้าวสาร", "ไข่", "นม"],
+  detail: "ไข่นุ่ม ๆ กินกับข้าวร้อน ๆ อร่อยมาก"
+},
+{
+  name: "ข้าวไข่ข้นชีส",
+  emoji: "🧀",
+  ingredients: ["ข้าวสาร", "ไข่", "นม", "ชีส"],
+  detail: "เพิ่มความหอมมัน เหมาะกับคนชอบชีส"
+},
+{
+  name: "ออมเล็ตชีส",
+  emoji: "🍳",
+  ingredients: ["ไข่", "ชีส", "นม"],
+  detail: "ไข่ฟูสไตล์ฝรั่ง ทำง่ายและดูดี"
+},
+{
+  name: "ออมเล็ตเห็ด",
+  emoji: "🍄",
+  ingredients: ["ไข่", "เห็ด", "นม"],
+  detail: "เมนูไข่ที่ได้ความหอมจากเห็ด"
+},
+{
+  name: "ไข่ตุ๋น",
+  emoji: "🥚",
+  ingredients: ["ไข่", "นม", "ซีอิ๊ว"],
+  detail: "เนื้อนุ่ม ละมุน เหมาะกับมื้อเบา ๆ"
+},
+{
+  name: "ไข่คนเบคอน",
+  emoji: "🥓",
+  ingredients: ["ไข่", "เบคอน", "เนย"],
+  detail: "มื้อเช้าคลาสสิก อิ่มและทำไว"
+},
+{
+  name: "ไข่ดาวกรอบ",
+  emoji: "🍳",
+  ingredients: ["ไข่", "น้ำมันพืช"],
+  detail: "เมนูพื้นฐานที่ใช้วัตถุดิบน้อยมาก"
+},
+{
+  name: "ไข่ต้มซีอิ๊ว",
+  emoji: "🥚",
+  ingredients: ["ไข่", "ซีอิ๊ว"],
+  detail: "ง่าย ประหยัด และเก็บกินได้"
+},
+{
+  name: "มาม่าต้มไข่",
+  emoji: "🍜",
+  ingredients: ["เส้นมาม่า", "ไข่", "น้ำปลา"],
+  detail: "เมนูประหยัด ทำง่ายมาก"
+},
+{
+  name: "มาม่าผัดเบคอน",
+  emoji: "🍜",
+  ingredients: ["เส้นมาม่า", "เบคอน", "ไข่"],
+  detail: "เพิ่มความหอมมันจากเบคอน"
+},
+{
+  name: "มาม่าผัดไส้กรอก",
+  emoji: "🌭",
+  ingredients: ["เส้นมาม่า", "ไส้กรอก", "ไข่"],
+  detail: "รสคุ้นเคย กินง่าย ถูกใจหลายคน"
+},
+{
+  name: "พาสต้าซอสมะเขือเทศ",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "มะเขือเทศ", "กระเทียม"],
+  detail: "เมนูเส้นสไตล์ง่าย ๆ จากของติดครัว"
+},
+{
+  name: "พาสต้าเบคอน",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "เบคอน", "เนย"],
+  detail: "หอม มัน และอิ่มท้อง"
+},
+{
+  name: "พาสต้าครีมซอส",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "นม", "ชีส", "เนย"],
+  detail: "เมนูครีมมี่สำหรับสายชอบซอสนัว"
+},
+{
+  name: "แซนด์วิชเบคอนไข่",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "เบคอน", "ไข่"],
+  detail: "มื้อเช้าหรือมื้อเร่งรีบก็เหมาะ"
+},
+{
+  name: "แซนด์วิชแฮมชีส",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "แฮม", "ชีส"],
+  detail: "เมนูง่ายและคลาสสิก"
+},
+{
+  name: "แซนด์วิชทูน่า",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "ทูน่า", "มายองเนส"],
+  detail: "ทำง่าย เหมาะกับของในตู้เย็น"
+},
+{
+  name: "แซนด์วิชไข่ชีส",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "ไข่", "ชีส"],
+  detail: "อิ่มง่ายและรสกลมกล่อม"
+},
+{
+  name: "เฟรนช์โทสต์",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "ไข่", "นม", "เนย"],
+  detail: "จะกินคาวหรือหวานก็ปรับได้"
+},
+{
+  name: "ขนมปังอบชีส",
+  emoji: "🧀",
+  ingredients: ["ขนมปัง", "ชีส", "เนย"],
+  detail: "ของกินเล่นทำง่าย ใช้ของน้อย"
+},
+{
+  name: "อกไก่ย่างพริกไทย",
+  emoji: "🍗",
+  ingredients: ["อกไก่", "พริกไทย", "น้ำมันมะกอก"],
+  detail: "เมนูโปรตีนสูง เหมาะกับสายสุขภาพ"
+},
+{
+  name: "อกไก่ผัดกระเทียม",
+  emoji: "🍗",
+  ingredients: ["อกไก่", "กระเทียม", "ซอสปรุงรส"],
+  detail: "เมนูง่าย ใช้วัตถุดิบพื้นฐาน"
+},
+{
+  name: "ไก่ผัดมะเขือเทศ",
+  emoji: "🍅",
+  ingredients: ["ไก่", "มะเขือเทศ", "กระเทียม"],
+  detail: "รสเปรี้ยวหวานเบา ๆ กินง่าย"
+},
+{
+  name: "หมูผัดกระเทียม",
+  emoji: "🍖",
+  ingredients: ["หมู", "กระเทียม", "ซอสปรุงรส"],
+  detail: "เมนูยอดนิยม ใช้ของน้อย"
+},
+{
+  name: "หมูผัดหอมใหญ่",
+  emoji: "🧅",
+  ingredients: ["หมู", "หอมใหญ่", "ซอสปรุงรส"],
+  detail: "รสหวานจากหอมใหญ่ เหมาะกับทุกวัย"
+},
+{
+  name: "หมูผัดเห็ด",
+  emoji: "🍄",
+  ingredients: ["หมู", "เห็ด", "ซอสปรุงรส"],
+  detail: "หอมและอิ่ม เหมาะกับมื้อกลางวัน"
+},
+{
+  name: "แฮมผัดไข่",
+  emoji: "🍳",
+  ingredients: ["แฮม", "ไข่", "ซอสปรุงรส"],
+  detail: "เมนูง่าย ๆ จากของในตู้เย็น"
+},
+{
+  name: "ไส้กรอกผัดไข่",
+  emoji: "🌭",
+  ingredients: ["ไส้กรอก", "ไข่", "ซอสปรุงรส"],
+  detail: "เมนูคุ้นเคย ทำไว"
+},
+{
+  name: "ปลาย่างเนย",
+  emoji: "🐟",
+  ingredients: ["ปลา", "เนย", "พริกไทย"],
+  detail: "เมนูเบาแต่ดูดี"
+},
+{
+  name: "ปลาอบมะนาว",
+  emoji: "🐟",
+  ingredients: ["ปลา", "มะนาว", "กระเทียม"],
+  detail: "รสเปรี้ยวสดชื่น กินง่าย"
+},
+{
+  name: "ทูน่าสลัด",
+  emoji: "🥗",
+  ingredients: ["ทูน่า", "ผักกาด", "มะเขือเทศ"],
+  detail: "เมนูสุขภาพที่ทำไม่ยาก"
+},
+{
+  name: "สลัดไข่",
+  emoji: "🥗",
+  ingredients: ["ไข่", "ผักกาด", "มะเขือเทศ"],
+  detail: "เบา สดชื่น และอิ่มกำลังดี"
+},
+{
+  name: "สลัดแตงกวาโยเกิร์ต",
+  emoji: "🥒",
+  ingredients: ["แตงกวา", "โยเกิร์ต"],
+  detail: "สดชื่น ทำง่าย และแปลกจากเมนูเดิม ๆ"
+},
+{
+  name: "มันฝรั่งผัดเนย",
+  emoji: "🥔",
+  ingredients: ["มันฝรั่ง", "เนย", "พริกไทย"],
+  detail: "กินเล่นก็ได้ กินจริงก็อร่อย"
+},
+{
+  name: "มันบด",
+  emoji: "🥔",
+  ingredients: ["มันฝรั่ง", "นม", "เนย"],
+  detail: "นุ่ม ละมุน เหมาะเป็นเครื่องเคียง"
+},
+{
+  name: "ซุปมันฝรั่ง",
+  emoji: "🍲",
+  ingredients: ["มันฝรั่ง", "นม", "หอมใหญ่"],
+  detail: "เมนูอุ่น ๆ จากวัตถุดิบพื้นฐาน"
+},
+// ===== เพิ่มอีก 20 เมนู =====
+{
+  name: "ไข่กระทะ",
+  emoji: "🍳",
+  ingredients: ["ไข่", "ไส้กรอก", "ซอสมะเขือเทศ"],
+  detail: "มื้อเช้าง่าย ๆ อิ่มเร็วและใช้ของในตู้เย็นทั่วไป"
+},
+{
+  name: "ไข่ดาวเบคอน",
+  emoji: "🥓",
+  ingredients: ["ไข่", "เบคอน"],
+  detail: "เมนูง่ายมาก ใช้วัตถุดิบน้อยและทำไว"
+},
+{
+  name: "แฮมชีสโทสต์",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "แฮม", "ชีส"],
+  detail: "ขนมปังกรอบนอกนุ่มใน เหมาะกับมื้อเร่งด่วน"
+},
+{
+  name: "แซนด์วิชอกไก่",
+  emoji: "🥪",
+  ingredients: ["ขนมปัง", "อกไก่", "มายองเนส"],
+  detail: "มื้อเบาแต่ยังอิ่ม เหมาะกับสายเฮลตี้"
+},
+{
+  name: "ข้าวผัดแฮม",
+  emoji: "🍚",
+  ingredients: ["ข้าวสาร", "แฮม", "ไข่"],
+  detail: "เมนูคุ้นเคย รสชาติทานง่ายและทำไม่ยาก"
+},
+{
+  name: "ข้าวผัดไส้กรอก",
+  emoji: "🍚",
+  ingredients: ["ข้าวสาร", "ไส้กรอก", "ไข่"],
+  detail: "เหมาะกับวันที่อยากได้เมนูอิ่มง่ายจากของที่มี"
+},
+{
+  name: "ข้าวผัดทูน่า",
+  emoji: "🍚",
+  ingredients: ["ข้าวสาร", "ทูน่า", "ไข่"],
+  detail: "เพิ่มโปรตีนจากทูน่า ทำง่ายและอิ่มกำลังดี"
+},
+{
+  name: "ไข่คนแฮม",
+  emoji: "🍳",
+  ingredients: ["ไข่", "แฮม", "นม"],
+  detail: "ไข่นุ่ม ๆ เพิ่มรสชาติจากแฮม เหมาะกับมื้อเช้า"
+},
+{
+  name: "ไข่คนอกไก่",
+  emoji: "🍳",
+  ingredients: ["ไข่", "อกไก่", "นม"],
+  detail: "เมนูโปรตีนสูงสำหรับคนอยากกินคาวแบบเบา ๆ"
+},
+{
+  name: "ไข่คนทูน่า",
+  emoji: "🍳",
+  ingredients: ["ไข่", "ทูน่า", "นม"],
+  detail: "เมนูง่ายแต่ดูพิเศษขึ้นจากทูน่า"
+},
+{
+  name: "มาม่าเบคอนชีส",
+  emoji: "🍜",
+  ingredients: ["เส้นมาม่า", "เบคอน", "ชีส"],
+  detail: "เมนูเส้นสายครีมมี่ เข้มข้นและอิ่มง่าย"
+},
+{
+  name: "มาม่าต้มยำกุ้ง",
+  emoji: "🍜",
+  ingredients: ["เส้นมาม่า", "กุ้ง", "มะนาว"],
+  detail: "รสจัดขึ้นหน่อย เหมาะกับคนชอบเมนูแซ่บ"
+},
+{
+  name: "สปาเกตตีเบคอนกระเทียม",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "เบคอน", "กระเทียม"],
+  detail: "เมนูคาวกลิ่นหอม ทำง่ายและดูดี"
+},
+{
+  name: "สปาเกตตีทูน่าซอสมะเขือเทศ",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "ทูน่า", "ซอสมะเขือเทศ"],
+  detail: "รสชาติเข้าถึงง่าย เหมาะกับวัตถุดิบติดบ้าน"
+},
+{
+  name: "สปาเกตตีครีมชีส",
+  emoji: "🍝",
+  ingredients: ["เส้นพาสต้า", "นม", "ชีส", "เนย"],
+  detail: "ซอสนุ่มมัน เหมาะกับคนชอบเมนูเส้น"
+},
+{
+  name: "ปลาแซลมอนผัดเนย",
+  emoji: "🐟",
+  ingredients: ["แซลมอน", "เนย", "พริกไทย"],
+  detail: "เมนูง่ายแต่ดูพรีเมียม กลิ่นหอมและกินเพลิน"
+},
+{
+  name: "กุ้งผัดกระเทียม",
+  emoji: "🦐",
+  ingredients: ["กุ้ง", "กระเทียม", "ซอสปรุงรส"],
+  detail: "เมนูคาวรสจัดนิด ๆ ทำง่ายและใช้ของไม่เยอะ"
+},
+{
+  name: "เต้าหู้ผัดซีอิ๊ว",
+  emoji: "🧈",
+  ingredients: ["เต้าหู้", "ซีอิ๊ว", "กระเทียม"],
+  detail: "เมนูง่ายสำหรับคนอยากได้โปรตีนจากเต้าหู้"
+},
+{
+  name: "ข้าวหน้าเต้าหู้ไข่",
+  emoji: "🍚",
+  ingredients: ["ข้าวสาร", "เต้าหู้", "ไข่"],
+  detail: "มื้ออิ่มง่าย ใช้วัตถุดิบพื้นฐานที่มีบ่อย"
+},
+{
+  name: "มันฝรั่งอบชีส",
+  emoji: "🥔",
+  ingredients: ["มันฝรั่ง", "ชีส", "เนย"],
+  detail: "ของกินเล่นหรือเครื่องเคียงที่อร่อยและทำไม่ยาก"
+},
+// ===== เมนูของหวาน 20 เมนู =====
+{
+  name: "ขนมปังเนยนม",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "เนย", "นม"],
+  detail: "เมนูง่าย หอมหวาน ทำไวสุด ๆ"
+},
+{
+  name: "ขนมปังปิ้งน้ำตาล",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "น้ำตาล", "เนย"],
+  detail: "กรอบนอกหวานใน กินเพลิน"
+},
+{
+  name: "ขนมปังช็อกโกแลต",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "ช็อกโกแลต", "เนย"],
+  detail: "สายหวานต้องเลิฟ ละลายหอม ๆ"
+},
+{
+  name: "กล้วยหอมทอด",
+  emoji: "🍌",
+  ingredients: ["กล้วย", "แป้ง", "น้ำตาล"],
+  detail: "กรอบนอกนุ่มใน หวานกำลังดี"
+},
+{
+  name: "กล้วยนมสด",
+  emoji: "🍌",
+  ingredients: ["กล้วย", "นม"],
+  detail: "หวานธรรมชาติ ดื่มง่าย"
+},
+{
+  name: "กล้วยปิ้งน้ำผึ้ง",
+  emoji: "🍌",
+  ingredients: ["กล้วย", "น้ำผึ้ง"],
+  detail: "หอม หวาน นุ่ม อร่อยแบบไทย ๆ"
+},
+{
+  name: "ไข่หวาน (คัสตาร์ดง่าย)",
+  emoji: "🍮",
+  ingredients: ["ไข่", "นม", "น้ำตาล"],
+  detail: "เนียนนุ่ม หอมไข่"
+},
+{
+  name: "แพนเค้กง่าย ๆ",
+  emoji: "🥞",
+  ingredients: ["แป้ง", "ไข่", "นม"],
+  detail: "เมนูคลาสสิก ทำง่ายมาก"
+},
+{
+  name: "แพนเค้กน้ำผึ้ง",
+  emoji: "🥞",
+  ingredients: ["แป้ง", "ไข่", "น้ำผึ้ง"],
+  detail: "หวานหอม ทานเพลิน"
+},
+{
+  name: "เฟรนช์โทสต์",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "ไข่", "นม"],
+  detail: "นุ่มฉ่ำ หอมไข่และนม"
+},
+{
+  name: "ขนมปังไข่หวาน",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "ไข่", "น้ำตาล"],
+  detail: "หวานมัน กินง่าย"
+},
+{
+  name: "นมกล้วยปั่น",
+  emoji: "🥤",
+  ingredients: ["นม", "กล้วย"],
+  detail: "เครื่องดื่มหวานธรรมชาติ"
+},
+{
+  name: "นมสตรอว์เบอร์รี่",
+  emoji: "🥤",
+  ingredients: ["นม", "สตรอว์เบอร์รี่"],
+  detail: "สดชื่น หวานอมเปรี้ยว"
+},
+{
+  name: "สตรอว์เบอร์รี่โยเกิร์ต",
+  emoji: "🍓",
+  ingredients: ["สตรอว์เบอร์รี่", "โยเกิร์ต"],
+  detail: "เบา ๆ สายสุขภาพ"
+},
+{
+  name: "โยเกิร์ตน้ำผึ้ง",
+  emoji: "🍯",
+  ingredients: ["โยเกิร์ต", "น้ำผึ้ง"],
+  detail: "หวานละมุน ดีต่อสุขภาพ"
+},
+{
+  name: "แอปเปิ้ลน้ำผึ้ง",
+  emoji: "🍎",
+  ingredients: ["แอปเปิ้ล", "น้ำผึ้ง"],
+  detail: "ของหวานคลีน ๆ"
+},
+{
+  name: "ช็อกโกแลตนม",
+  emoji: "🍫",
+  ingredients: ["ช็อกโกแลต", "นม"],
+  detail: "เข้มข้น หวานมัน"
+},
+{
+  name: "นมร้อนน้ำผึ้ง",
+  emoji: "🥛",
+  ingredients: ["นม", "น้ำผึ้ง"],
+  detail: "อุ่น ๆ ก่อนนอน"
+},
+{
+  name: "ขนมปังแยม",
+  emoji: "🍞",
+  ingredients: ["ขนมปัง", "แยม"],
+  detail: "ง่ายสุด ๆ แต่ยังอร่อย"
+},
+{
+  name: "แตงโมเย็น",
+  emoji: "🍉",
+  ingredients: ["แตงโม"],
+  detail: "หวานเย็น สดชื่น"
+}
+    ];
+
+    function getFridgeItems() {
+  const raw = localStorage.getItem("fridgeItems");
+  return raw ? JSON.parse(raw) : [];
+}
+
+    function scoreRecipes(items) {
+      return recipes.map(recipe => {
+        const matched = recipe.ingredients.filter(ingredient => items.includes(ingredient));
+        const missing = recipe.ingredients.filter(ingredient => !items.includes(ingredient));
+        const score = recipe.ingredients.length > 0
+          ? Math.round((matched.length / recipe.ingredients.length) * 100)
+          : 0;
+
+        return {
+          ...recipe,
+          matched,
+          missing,
+          score
+        };
+      }).sort((a, b) => b.score - a.score || a.missing.length - b.missing.length);
+    }
+
+    function renderIngredients(items) {
+      document.getElementById("ingredientCount").textContent =
+        "You have " + items.length + " ingredients";
+
+      const tagBox = document.getElementById("ingredientTags");
+      tagBox.innerHTML = "";
+
+      if (items.length === 0) {
+        tagBox.innerHTML = "<span class='tag'>ยังไม่ได้เลือกวัตถุดิบ</span>";
+      } else {
+        items.forEach(item => {
+          const span = document.createElement("span");
+          span.className = "tag";
+          span.textContent = item;
+          tagBox.appendChild(span);
+        });
+      }
+
+      const listBox = document.getElementById("ingredientList");
+      listBox.innerHTML = "";
+
+      if (items.length === 0) {
+        listBox.innerHTML = "<p style='color:#777;'>ยังไม่ได้เลือกวัตถุดิบ</p>";
+        return;
+      }
+
+      items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "ingredient-item";
+        div.innerHTML = "<span>" + item + "</span><span>🗑️</span>";
+        listBox.appendChild(div);
+      });
+    }
+
+    function getBadgeClass(score) {
+      if (score === 100) return "match-badge badge-good";
+      if (score >= 50) return "match-badge badge-mid";
+      return "match-badge badge-low";
+    }
+
+    function getBadgeText(score, missingCount) {
+      if (score === 100) return "ทำได้เลย";
+      if (score >= 50) return "ใกล้ครบแล้ว";
+      if (missingCount === 0) return "ทำได้เลย";
+      return "แนะนำเผื่อไว้";
+    }
+
+    function renderRecipes(items) {
+      const scored = scoreRecipes(items);
+      const recipeList = document.getElementById("recipeList");
+      recipeList.innerHTML = "";
+
+      const displayRecipes = scored.slice(0, 12);
+
+      document.getElementById("recipeCountTitle").textContent =
+        "Recommended " + displayRecipes.length + " recipes";
+
+      displayRecipes.forEach(recipe => {
+        const card = document.createElement("div");
+        card.className = "recipe-card";
+
+        let missingText = "";
+        if (recipe.missing.length === 0) {
+          missingText = "คุณมีวัตถุดิบครบทั้งหมด";
+        } else {
+          missingText = "ยังขาด: " + recipe.missing.join(", ");
+        }
+
+        card.innerHTML = `
+          <div class="recipe-img">${recipe.emoji}</div>
+          <div class="recipe-info">
+            <div class="${getBadgeClass(recipe.score)}">${getBadgeText(recipe.score, recipe.missing.length)}</div>
+            <h4>${recipe.name}</h4>
+            <p>${recipe.detail}</p>
+            <p class="small-note">มีแล้ว: ${recipe.matched.length ? recipe.matched.join(", ") : "ยังไม่มีวัตถุดิบตรง"}</p>
+            <p class="small-note">${missingText}</p>
+          </div>
+          <div class="recipe-actions">
+            <div class="percent">${recipe.score}%</div>
+            <div>match</div>
+          </div>
+        `;
+        recipeList.appendChild(card);
+      });
+    }
+
+    function goBack() {
+      window.location.href = "fridge.html";
+    }
+
+    function goResult() {
+      window.location.href = "result.html";
+    }
+
+    function goHome() {
+      window.location.href = "result.html";
+    }
+
+    function goHistory() {
+      window.location.href = "history.html";
+    }
+
+    function logout() {
+  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+  if (confirmLogout) {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInName");
+    window.location.href = "login.html";
+  }
+}
+
+    const items = getFridgeItems();
+    renderIngredients(items);
+    renderRecipes(items);
+  </script>
+</body>
+</html>

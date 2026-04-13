@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - Check Fridge</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(90deg,#f06a00 0%,#d85a00 100%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .browser-frame{
+      width:1180px;
+      max-width:100%;
+      background:#8f4720;
+      border-radius:18px;
+      padding:18px 18px 24px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .dot{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .searchbar{
+      width:520px;
+      max-width:55%;
+      height:54px;
+      border-radius:14px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      color:#333;
+      font-size:28px;
+    }
+
+    .main-card{
+      background:#fff;
+      border-radius:32px;
+      overflow:hidden;
+      min-height:700px;
+      position:relative;
+    }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 26px;
+      border-bottom:1px solid #eee;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#8c5a46;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      background:#efefef;
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:18px;
+      color:#666;
+      cursor:pointer;
+    }
+
+    .nav-btn.active{
+      background:#e5e5e5;
+      font-weight:700;
+    }
+
+    .content{
+      padding:26px 30px 34px;
+    }
+
+    .search-box{
+      width:100%;
+      max-width:620px;
+      height:62px;
+      border:3px solid #6b625e;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      margin-bottom:30px;
+    }
+
+    .search-box input{
+      border:none;
+      outline:none;
+      width:100%;
+      font-size:24px;
+      margin:0 12px;
+    }
+
+    .search-box .icon{
+      font-size:28px;
+      color:#333;
+    }
+
+    .grid{
+      display:grid;
+    grid-template-columns:1fr 1fr;
+      gap:34px 42px;
+    }
+
+    .section h2{
+      font-size:28px;
+      font-weight:500;
+      color:#333;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+    }
+
+    .section hr{
+      border:none;
+      border-top:2px solid #d9d9d9;
+      margin-bottom:18px;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .chip{
+      border:none;
+      border-radius:12px;
+      padding:12px 18px;
+      background:#ededed;
+      font-size:18px;
+      color:#444;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .chip.selected{
+      background:#9ee56f;
+      color:#1f3d10;
+      font-weight:600;
+    }
+
+    .chip.more{
+      background:#dcdcdc;
+    }
+
+    .bottom-row{
+      margin-top:34px;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .action-btn{
+      border:none;
+      border-radius:999px;
+      padding:16px 28px;
+      font-size:22px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .back-btn{
+      background:#efefef;
+      color:#666;
+    }
+
+    .save-btn{
+      background:#d67b49;
+      color:white;
+    }
+
+    .socials{
+      position:absolute;
+      right:22px;
+      bottom:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .social-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      text-decoration:none;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .phone-btn{ background:#25d366; }
+    .mail-btn{ background:#2563eb; }
+
+    @media (max-width: 900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .searchbar{
+        display:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="searchbar">
+        <span>Decide less, enjoy more</span>
+        <span>×</span>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn active" onclick="goHome()">หน้าหลัก</button>
+          <button type="button" class="nav-btn" onclick="goHistory()">ประวัติการใช้งาน</button>
+          <button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="search-box">
+          <span class="icon">🔍</span>
+          <input type="text" id="ingredientSearch" placeholder="ค้นหาวัตถุดิบ">
+          <span class="icon" onclick="clearSearch()" style="cursor:pointer;">×</span>
+        </div>
+
+        <div class="grid">
+          <div class="section">
+            <h2>ของแห้ง / เครื่องปรุง <span>▼</span></h2>
+            <hr>
+            <div class="chips">
+              <button class="chip" data-value="น้ำตาล">น้ำตาล</button>
+              <button class="chip" data-value="หอมใหญ่">หอมใหญ่</button>
+              <button class="chip" data-value="กระเทียม">กระเทียม</button>
+              <button class="chip" data-value="นม">นม</button>
+              <button class="chip" data-value="มะเขือเทศ">มะเขือเทศ</button>
+              <button class="chip" data-value="เนย">เนย</button>
+              <button class="chip" data-value="ขนมปัง">ขนมปัง</button>
+              <button class="chip" data-value="ไข่">ไข่</button>
+              <button class="chip" data-value="ชีส">ชีส</button>
+              <button class="chip" data-value="น้ำผึ้ง">น้ำผึ้ง</button>
+              <button class="chip" data-value="พริกไทย">พริกไทย</button>
+              <button class="chip" data-value="ซอสปรุงรส">ซอสปรุงรส</button>
+              <button class="chip" data-value="น้ำปลา">น้ำปลา</button>
+              <button class="chip" data-value="ซีอิ๊ว">ซีอิ๊ว</button>
+              <button class="chip more" disabled>+ เพิ่มเติม</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>เนื้อสัตว์ / โปรตีน <span>▼</span></h2>
+            <hr>
+            <div class="chips">
+              <button class="chip" data-value="เบคอน">เบคอน</button>
+              <button class="chip" data-value="หมู">หมู</button>
+              <button class="chip" data-value="อกไก่">อกไก่</button>
+              <button class="chip" data-value="ไก่">ไก่</button>
+              <button class="chip" data-value="แซลมอน">แซลมอน</button>
+              <button class="chip" data-value="ปลา">ปลา</button>
+              <button class="chip" data-value="กุ้ง">กุ้ง</button>
+              <button class="chip" data-value="ปูอัด">ปูอัด</button>
+              <button class="chip" data-value="ทูน่า">ทูน่า</button>
+              <button class="chip" data-value="เต้าหู้">เต้าหู้</button>
+              <button class="chip" data-value="หมูสับ">หมูสับ</button>
+              <button class="chip" data-value="ไส้กรอก">ไส้กรอก</button>
+              <button class="chip" data-value="แฮม">แฮม</button>
+              <button class="chip" data-value="ไข่ไก่">ไข่ไก่</button>
+              <button class="chip more" disabled>+ เพิ่มเติม</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>ผัก / ผลไม้ <span>▼</span></h2>
+            <hr>
+            <div class="chips">
+              <button class="chip" data-value="แตงกวา">แตงกวา</button>
+              <button class="chip" data-value="เห็ด">เห็ด</button>
+              <button class="chip" data-value="แครอท">แครอท</button>
+              <button class="chip" data-value="ผักกาด">ผักกาด</button>
+              <button class="chip" data-value="กะหล่ำปลี">กะหล่ำปลี</button>
+              <button class="chip" data-value="ต้นหอม">ต้นหอม</button>
+              <button class="chip" data-value="ผักชี">ผักชี</button>
+              <button class="chip" data-value="มะนาว">มะนาว</button>
+              <button class="chip" data-value="สตรอว์เบอร์รี">สตรอว์เบอร์รี</button>
+              <button class="chip" data-value="แอปเปิล">แอปเปิล</button>
+              <button class="chip" data-value="กล้วย">กล้วย</button>
+              <button class="chip" data-value="อโวคาโด">อโวคาโด</button>
+              <button class="chip" data-value="มันฝรั่ง">มันฝรั่ง</button>
+              <button class="chip" data-value="หอมหัวแดง">หอมหัวแดง</button>
+              <button class="chip more" disabled>+ เพิ่มเติม</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>ถั่ว / น้ำมัน / อื่น ๆ <span>▼</span></h2>
+            <hr>
+            <div class="chips">
+              <button class="chip" data-value="ถั่วลิสง">ถั่วลิสง</button>
+              <button class="chip" data-value="อัลมอนด์">อัลมอนด์</button>
+              <button class="chip" data-value="งา">งา</button>
+              <button class="chip" data-value="น้ำมันพืช">น้ำมันพืช</button>
+              <button class="chip" data-value="น้ำมันมะกอก">น้ำมันมะกอก</button>
+              <button class="chip" data-value="มายองเนส">มายองเนส</button>
+              <button class="chip" data-value="ซอสมะเขือเทศ">ซอสมะเขือเทศ</button>
+              <button class="chip" data-value="แยม">แยม</button>
+                          <button class="chip" data-value="โยเกิร์ต">โยเกิร์ต</button>
+              <button class="chip" data-value="โอ๊ต">โอ๊ต</button>
+              <button class="chip" data-value="ข้าวสาร">ข้าวสาร</button>
+              <button class="chip" data-value="เส้นมาม่า">เส้นมาม่า</button>
+              <button class="chip" data-value="เส้นพาสต้า">เส้นพาสต้า</button>
+              <button class="chip" data-value="แป้ง">แป้ง</button>
+              <button class="chip more" disabled>+ เพิ่มเติม</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <button class="action-btn back-btn" onclick="goBack()">กลับหน้าผลลัพธ์</button>
+          <button class="action-btn save-btn" onclick="saveAndGoResult()">ดูเมนูที่ทำได้</button>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a class="social-icon phone-btn" href="tel:02462252257">☎</a>
+        <a class="social-icon mail-btn" href="mailto:mealdecider@example.com">✉</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedIngredients = [];
+
+    const chips = document.querySelectorAll(".chip[data-value]");
+    chips.forEach(chip => {
+      chip.addEventListener("click", function () {
+        const value = chip.dataset.value;
+        chip.classList.toggle("selected");
+
+        if (selectedIngredients.includes(value)) {
+          selectedIngredients = selectedIngredients.filter(item => item !== value);
+        } else {
+          selectedIngredients.push(value);
+        }
+      });
+    });
+
+    function saveAndGoResult() {
+      localStorage.setItem("fridgeItems", JSON.stringify(selectedIngredients));
+      window.location.href = "fridge-result.html";
+    }
+
+    function goBack() {
+      window.location.href = "result.html";
+    }
+
+    function goHome() {
+      window.location.href = "result.html";
+    }
+
+    function goHistory() {
+      window.location.href = "history.html";
+    }
+
+    function logout() {
+  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+  if (confirmLogout) {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInName");
+    window.location.href = "login.html";
+  }
+}
+    function clearSearch() {
+      document.getElementById("ingredientSearch").value = "";
+    }
+
+    window.onload = function () {
+      const saved = localStorage.getItem("fridgeItems");
+      if (saved) {
+        selectedIngredients = JSON.parse(saved);
+        chips.forEach(chip => {
+          if (selectedIngredients.includes(chip.dataset.value)) {
+            chip.classList.add("selected");
+          }
+        });
+      }
+    };
+  </script>
+</body>
+</html>

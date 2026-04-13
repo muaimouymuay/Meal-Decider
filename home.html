@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meal Decider - Home</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(90deg, #f06a00 0%, #d85a00 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .browser-frame {
+      width: 1150px;
+      max-width: 100%;
+      background: #8f4720;
+      border-radius: 18px;
+      padding: 18px 18px 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+      margin-left: 6px;
+    }
+
+    .dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .main-card {
+      background: #fff;
+      border-radius: 32px;
+      overflow: hidden;
+      min-height: 690px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 26px;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #8c5a46;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: #efefef;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 18px;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: #e5e5e5;
+      font-weight: 700;
+    }
+
+    .step-banner {
+      background: #d67b49;
+      color: white;
+      text-align: center;
+      font-size: 46px;
+      font-weight: 900;
+      padding: 18px 10px;
+    }
+
+    .content {
+      padding: 26px 34px 34px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 28px;
+      margin-bottom: 26px;
+    }
+
+    .option-btn {
+      border: 3px solid #6b625e;
+      border-radius: 999px;
+      background: #fff;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: left;
+      font-size: 20px;
+      font-weight: 700;
+      color: #444;
+      width: 100%;
+    }
+
+    .option-btn:hover {
+      background: #fff6f1;
+    }
+
+    .option-btn.selected {
+      background: #ffe3d2;
+      border-color: #d67b49;
+      color: #a84f1f;
+    }
+
+    .emoji-box {
+      width: 64px;
+      height: 46px;
+      border-radius: 12px;
+      background: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .option-label {
+      flex: 1;
+      text-align: left;
+    }
+
+    .spicy-icons {
+      width: 120px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-start;
+      flex-shrink: 0;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .spicy-icons.center {
+      justify-content: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .note {
+      font-size: 18px;
+      color: #777;
+      margin-top: -8px;
+      margin-bottom: 18px;
+    }
+
+    .bottom-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .back-btn,
+    .next-btn {
+      border: none;
+      border-radius: 999px;
+      min-width: 160px;
+      height: 60px;
+      font-size: 26px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0 24px;
+    }
+
+    .back-btn {
+      background: #efefef;
+      color: #999;
+    }
+
+    .next-btn {
+      background: #c96b3a;
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step-banner {
+        font-size: 34px;
+      }
+
+      .spicy-icons {
+        width: 110px;
+        min-width: 110px;
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="browser-frame">
+    <div class="topbar">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="header-row">
+        <div class="logo">MEAL DECIDER</div>
+        <div class="nav-actions">
+          <button type="button" class="nav-btn active" id="homeNav">หน้าหลัก</button>
+          <button type="button" class="nav-btn" id="historyNav">ประวัติการใช้งาน</button>
+          <button type="button" class="nav-btn" id="logoutNav">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="step-banner" id="stepTitle">ขั้นตอน 1 จาก 4</div>
+
+      <div class="content">
+        <!-- STEP 1 -->
+        <section id="step1" class="step-section">
+          <div class="section-title">ตั้งค่าความชอบอาหาร</div>
+          <div class="section-subtitle">เลือกประเภทอาหารที่ชอบ</div>
+
+          <div class="options-grid">
+            <button type="button" class="option-btn step1-option" data-value="อาหารไทย">
+              <div class="emoji-box">🍛</div>
+              <span class="option-label">อาหารไทย</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="ก๋วยเตี๋ยว">
+              <div class="emoji-box">🍜</div>
+              <span class="option-label">ก๋วยเตี๋ยว</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="ของหวาน">
+              <div class="emoji-box">🍰</div>
+              <span class="option-label">ของหวาน</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="ฟาสต์ฟู้ด">
+              <div class="emoji-box">🍔</div>
+              <span class="option-label">ฟาสต์ฟู้ด</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="อาหารญี่ปุ่น">
+              <div class="emoji-box">🍣</div>
+              <span class="option-label">อาหารญี่ปุ่น</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="อาหารอีสาน">
+              <div class="emoji-box">🌶️</div>
+              <span class="option-label">อาหารอีสาน</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="อาหารคลีน/สุขภาพ">
+              <div class="emoji-box">🥗</div>
+              <span class="option-label">อาหารคลีน/สุขภาพ</span>
+            </button>
+
+            <button type="button" class="option-btn step1-option" data-value="ฮาลาล">
+              <div class="emoji-box">🍗</div>
+              <span class="option-label">ฮาลาล</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section id="step2" class="step-section hidden">
+          <div class="section-title">อาหารที่ไม่ทาน / แพ้อาหาร</div>
+          <div class="section-subtitle">เลือกสิ่งที่คุณไม่ทานหรือแพ้</div>
+
+          <div class="options-grid">
+            <button type="button" class="option-btn step2-option" data-value="ผัก">
+              <div class="emoji-box">🥬</div>
+              <span class="option-label">ผัก</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="ชีส">
+              <div class="emoji-box">🧀</div>
+              <span class="option-label">ชีส</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="ปลาร้า">
+              <div class="emoji-box">🐟</div>
+              <span class="option-label">ปลาร้า</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="เครื่องใน">
+              <div class="emoji-box">🥩</div>
+              <span class="option-label">เครื่องใน</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="แพ้กุ้ง">
+              <div class="emoji-box">🦐</div>
+              <span class="option-label">แพ้กุ้ง</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="แพ้ถั่ว">
+              <div class="emoji-box">🥜</div>
+              <span class="option-label">แพ้ถั่ว</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="แพ้นม">
+              <div class="emoji-box">🥛</div>
+              <span class="option-label">แพ้นม</span>
+            </button>
+
+            <button type="button" class="option-btn step2-option" data-value="แพ้ปลา">
+              <div class="emoji-box">🐠</div>
+              <span class="option-label">แพ้ปลา</span>
+            </button>
+          </div>
+
+          <div class="note">กดเลือกได้มากกว่า 1 ข้อ</div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section id="step3" class="step-section hidden">
+          <div class="section-title">ระดับความเผ็ด</div>
+          <div class="section-subtitle">เลือกระดับความเผ็ดที่ต้องการ</div>
+
+          <div class="options-grid">
+            <button type="button" class="option-btn step3-option" data-value="ไม่ใส่พริก">
+              <div class="spicy-icons center">🚫</div>
+              <span class="option-label">ไม่ใส่พริก</span>
+            </button>
+
+            <button type="button" class="option-btn step3-option" data-value="เผ็ดน้อยมาก">
+              <div class="spicy-icons">🌶️</div>
+              <span class="option-label">เผ็ดน้อยมาก</span>
+            </b utton>
+
+            <button type="button" class="option-btn step3-option" data-value="เผ็ดน้อย">
+              <div class="spicy-icons">🌶️ 🌶️</div>
+              <span class="option-label">เผ็ดน้อย</span>
+            </button>
+
+            <button type="button" class="option-btn step3-option" data-value="เผ็ดปานกลาง">
+              <div class="spicy-icons">🌶️ 🌶️ 🌶️</div>
+              <span class="option-label">เผ็ดปานกลาง</span>
+            </button>
+
+            <button type="button" class="option-btn step3-option" data-value="เผ็ดปกติ">
+              <div class="spicy-icons">🌶️ 🌶️ 🌶️ 🌶️</div>
+              <span class="option-label">เผ็ดปกติ</span>
+            </button>
+
+            <button type="button" class="option-btn step3-option" data-value="เผ็ดมาก">
+              <div class="spicy-icons">🌶️ 🌶️ 🌶️ 🌶️ 🌶️</div>
+              <span class="option-label">เผ็ดมาก</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 4 -->
+        <section id="step4" class="step-section hidden">
+          <div class="section-title">ระดับงบประมาณต่อมื้อ</div>
+          <div class="section-subtitle">เลือกช่วงราคาที่เหมาะกับคุณ</div>
+
+          <div class="options-grid">
+            <button type="button" class="option-btn step4-option" data-value="ต่ำกว่า 50 บาท">
+              <div class="emoji-box">🪙</div>
+              <span class="option-label">ต่ำกว่า 50 บาท</span>
+            </button>
+
+            <button type="button" class="option-btn step4-option" data-value="50-100 บาท">
+              <div class="emoji-box">💰</div>
+              <span class="option-label">50-100 บาท</span>
+            </button>
+
+            <button type="button" class="option-btn step4-option" data-value="100-150 บาท">
+              <div class="emoji-box">💳</div>
+              <span class="option-label">100-150 บาท</span>
+            </button>
+
+            <button type="button" class="option-btn step4-option" data-value="150-300 บาท">
+              <div class="emoji-box">💸</div>
+              <span class="option-label">150-300 บาท</span>
+            </button>
+
+            <button type="button" class="option-btn step4-option" data-value="300-400 บาท">
+              <div class="emoji-box">💵</div>
+              <span class="option-label">300-400 บาท</span>
+            </button>
+          </div>
+        </section>
+
+        <div class="bottom-actions">
+          <button type="button" class="back-btn" id="backBtn">ย้อนกลับ</button>
+          <button type="button" class="next-btn" id="nextBtn">ถัดไป</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem("isLogin") !== "true") {
+  window.location.href = "login.html";
+}
+    const selections = {
+      favoriteFoods: [],
+      avoidFoods: [],
+      spicyLevel: "",
+      budget: ""
+    };
+
+    let currentStep = 1;
+
+    const stepTitle = document.getElementById("stepTitle");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    document.getElementById("homeNav").addEventListener("click", function () {
+      currentStep = 1;
+      updateStepUI();
+    });
+
+    document.getElementById("historyNav").addEventListener("click", function () {
+      window.location.href = "history.html";
+    });
+
+    document.getElementById("logoutNav").addEventListener("click", function () {
+      if (confirm("ต้องการออกจากระบบหรือไม่")) {
+        window.location.href = "login.html";
+      }
+    });
+
+    backBtn.addEventListener("click", function () {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepUI();
+      }
+    });
+
+    nextBtn.addEventListener("click", function () {
+      if (currentStep < 4) {
+        currentStep++;
+        updateStepUI();
+      } else {
+        localStorage.setItem("mealDeciderSelections", JSON.stringify(selections));
+        window.location.href = "result.html";
+      }
+    });
+
+    function updateStepUI() {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("step" + i).classList.add("hidden");
+      }
+
+      document.getElementById("step" + currentStep).classList.remove("hidden");
+      stepTitle.textContent = "ขั้นตอน " + currentStep + " จาก 4";
+      backBtn.style.visibility = currentStep === 1 ? "hidden" : "visible";
+      nextBtn.textContent = currentStep === 4 ? "เสร็จสิ้น" : "ถัดไป";
+    }
+
+    function toggleMultiSelect(button, targetArray) {
+      const value = button.dataset.value;
+      button.classList.toggle("selected");
+
+      if (targetArray.includes(value)) {
+        const index = targetArray.indexOf(value);
+        targetArray.splice(index, 1);
+      } else {
+        targetArray.push(value);
+      }
+    }
+
+    function setSingleSelect(button, selector, targetKey) {
+      document.querySelectorAll(selector).forEach(function (btn) {
+        btn.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      selections[targetKey] = button.dataset.value;
+    }
+
+    document.querySelectorAll(".step1-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        toggleMultiSelect(button, selections.favoriteFoods);
+      });
+    });
+
+    document.querySelectorAll(".step2-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        toggleMultiSelect(button, selections.avoidFoods);
+      });
+    });
+
+    document.querySelectorAll(".step3-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        setSingleSelect(button, ".step3-option", "spicyLevel");
+      });
+    });
+
+    document.querySelectorAll(".step4-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        setSingleSelect(button, ".step4-option", "budget");
+      });
+    });
+
+    updateStepUI();
+  </script>
+</body>
+</html>
