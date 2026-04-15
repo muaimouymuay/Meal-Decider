@@ -432,6 +432,7 @@
     display: block;
   }
 }
+}
   </style>
 </head>
 <body>
@@ -453,9 +454,12 @@
       <div class="header-row">
         <div class="logo">MEAL DECIDER</div>
         <div class="nav-actions">
-          <button type="button" class="nav-btn active" onclick="goHome()">หน้าหลัก</button>
-<button type="button" class="nav-btn" onclick="goHistory()">ประวัติการใช้งาน</button>
-<button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+          <div class="nav-actions">
+  <button class="nav-btn" onclick="goHome()">หน้าหลัก</button>
+  <button class="nav-btn" onclick="goHistory()">ประวัติเมนู</button>
+  <button class="nav-btn" onclick="goProfile()">โปรไฟล์</button>
+  <button class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+</div>
         </div>
       </div>
 
@@ -1843,6 +1847,9 @@ if (!currentMeal) {
 } else {
   showMeal(currentMeal);
 }
+ function goProfile() {
+    window.location.href = "profile.html";
+  }
   </script>
 </body>
 </html>
