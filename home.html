@@ -365,6 +365,7 @@
         <div class="nav-actions">
           <button type="button" class="nav-btn active" id="homeNav">หน้าหลัก</button>
           <button type="button" class="nav-btn" id="historyNav">ประวัติการใช้งาน</button>
+          <button class="nav-btn" onclick="goProfile()">โปรไฟล์</button>
           <button type="button" class="nav-btn" id="logoutNav">ออกจากระบบ</button>
         </div>
       </div>
@@ -655,6 +656,9 @@
     });
 
     updateStepUI();
+    function goProfile() {
+    window.location.href = "profile.html";
+  }
   </script>
 </body>
 </html>
