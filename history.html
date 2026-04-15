@@ -327,10 +327,11 @@
       <div class="header-row">
         <div class="logo">MEAL DECIDER</div>
         <div class="nav-actions">
-          <button type="button" class="nav-btn" onclick="goHome()">หน้าหลัก</button>
-          <button type="button" class="nav-btn active">ประวัติการใช้งาน</button>
-          <button type="button" class="nav-btn" onclick="logout()">ออกจากระบบ</button>
-        </div>
+  <button class="nav-btn" onclick="goHome()">หน้าหลัก</button>
+  <button class="nav-btn" onclick="goHistory()">ประวัติเมนู</button>
+  <button class="nav-btn" onclick="goProfile()">โปรไฟล์</button>
+  <button class="nav-btn" onclick="logout()">ออกจากระบบ</button>
+</div>
       </div>
 
       <div class="content">
@@ -427,6 +428,9 @@
 }
 
     renderHistory();
+     function goProfile() {
+    window.location.href = "profile.html";
+  }
   </script>
 </body>
 </html>
