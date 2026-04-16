@@ -351,28 +351,6 @@ if (listEl) {
   ).join("");
 }
 
-/* 4. เมนูตัวอย่าง (ลองก่อน) */
-const recipes = [
-  {
-    name: "ข้าวไข่เจียว",
-    emoji: "🍳",
-    ingredients: ["ไข่", "ข้าวสวย"],
-    detail: "เมนูง่าย อิ่มเร็ว"
-  },
-  {
-    name: "ผัดมาม่า",
-    emoji: "🍜",
-    ingredients: ["เส้นมาม่า", "ไข่"],
-    detail: "ทำง่าย อร่อย"
-  },
-  {
-    name: "ไข่ดาว",
-    emoji: "🍳",
-    ingredients: ["ไข่"],
-    detail: "ง่ายสุด ๆ"
-  }
-];
-
 /* 5. filter เมนู */
 const matchedRecipes = recipes.filter(recipe =>
   recipe.ingredients.some(i => selectedItems.includes(i))
@@ -1680,7 +1658,7 @@ function goHome() {
   emoji: "🥛",
   ingredients: ["นม", "แยม"],
   detail: "หวานหอม"
-},#
+},
 {
   name: "ข้าวไก่ผัดพริกไทยดำ",
   emoji: "🍗",
