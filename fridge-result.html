@@ -333,6 +333,77 @@
   </style>
 </head>
 <body>
+  <script>
+/* 1. ดึงวัตถุดิบ */
+const selectedItems = JSON.parse(localStorage.getItem("fridgeItems")) || [];
+
+/* 2. แสดงจำนวน */
+const countEl = document.getElementById("ingredientCount");
+if (countEl) {
+  countEl.textContent = selectedItems.length;
+}
+
+/* 3. แสดงวัตถุดิบ */
+const listEl = document.getElementById("selectedIngredients");
+if (listEl) {
+  listEl.innerHTML = selectedItems.map(item =>
+    `<span class="chip">${item}</span>`
+  ).join("");
+}
+
+/* 4. เมนูตัวอย่าง (ลองก่อน) */
+const recipes = [
+  {
+    name: "ข้าวไข่เจียว",
+    emoji: "🍳",
+    ingredients: ["ไข่", "ข้าวสวย"],
+    detail: "เมนูง่าย อิ่มเร็ว"
+  },
+  {
+    name: "ผัดมาม่า",
+    emoji: "🍜",
+    ingredients: ["เส้นมาม่า", "ไข่"],
+    detail: "ทำง่าย อร่อย"
+  },
+  {
+    name: "ไข่ดาว",
+    emoji: "🍳",
+    ingredients: ["ไข่"],
+    detail: "ง่ายสุด ๆ"
+  }
+];
+
+/* 5. filter เมนู */
+const matchedRecipes = recipes.filter(recipe =>
+  recipe.ingredients.some(i => selectedItems.includes(i))
+);
+
+/* 6. แสดงผล */
+const resultEl = document.getElementById("recipeList");
+
+if (resultEl) {
+  if (matchedRecipes.length === 0) {
+    resultEl.innerHTML = "<p>ยังไม่มีเมนูจากวัตถุดิบนี้</p>";
+  } else {
+    resultEl.innerHTML = matchedRecipes.map(r => `
+      <div class="card">
+        <div>${r.emoji}</div>
+        <h3>${r.name}</h3>
+        <p>${r.detail}</p>
+      </div>
+    `).join("");
+  }
+}
+
+/* 7. ปุ่มต้องมี function */
+function goBack() {
+  window.location.href = "fridge.html";
+}
+
+function goHome() {
+  window.location.href = "result.html";
+}
+</script>
   <div class="browser-frame">
     <div class="topbar">
       <div class="dots">
