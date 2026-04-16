@@ -416,70 +416,71 @@
     </div>
   </div>
 
-  <script>
-    let selectedIngredients = [];
+<script>
+  let selectedIngredients = [];
 
-    const chips = document.querySelectorAll(".chip[data-value]");
-    chips.forEach(chip => {
-      chip.addEventListener("click", function () {
-        const value = chip.dataset.value;
-        chip.classList.toggle("selected");
+  const chips = document.querySelectorAll(".chip[data-value]");
 
-        if (selectedIngredients.includes(value)) {
-          selectedIngredients = selectedIngredients.filter(item => item !== value);
-        } else {
-          selectedIngredients.push(value);
-        }
-      });
-    });
+  chips.forEach(chip => {
+    chip.addEventListener("click", function () {
+      const value = chip.dataset.value;
+      chip.classList.toggle("selected");
 
-    function saveAndGoResult() {
-      localStorage.setItem("fridgeItems", JSON.stringify(selectedIngredients));
-      window.location.href = "fridge-result.html";
-    }
-
-    function goBack() {
-      window.location.href = "result.html";
-    }
-
-    function goHome() {
-      window.location.href = "result.html";
-    }
-
-    function goHistory() {
-      window.location.href = "history.html";
-    }
-
-    function logout() {
-  const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
-  if (confirmLogout) {
-    localStorage.removeItem("isLogin");
-    localStorage.removeItem("loggedInEmail");
-    localStorage.removeItem("loggedInName");
-    window.location.href = "login.html";
-  }
-}
-    function clearSearch() {
-      document.getElementById("ingredientSearch").value = "";
-    }
-
-    window.onload = function () {
-      const saved = localStorage.getItem("fridgeItems");
-      if (saved) {
-        selectedIngredients = JSON.parse(saved);
-        chips.forEach(chip => {
-          if (selectedIngredients.includes(chip.dataset.value)) {
-            chip.classList.add("selected");
-          }
-        });
+      if (selectedIngredients.includes(value)) {
+        selectedIngredients = selectedIngredients.filter(item => item !== value);
+      } else {
+        selectedIngredients.push(value);
       }
-    };
-     function goProfile() {
+    });
+  });
+
+  function saveAndGoResult() {
+    localStorage.setItem("fridgeItems", JSON.stringify(selectedIngredients));
+    window.location.href = "fridge-result.html";
+  }
+
+  function goBack() {
+    window.location.href = "result.html";
+  }
+
+  function goHome() {
+    window.location.href = "result.html";
+  }
+
+  function goHistory() {
+    window.location.href = "history.html";
+  }
+
+  function goProfile() {
     window.location.href = "profile.html";
   }
-    window.onload = function () {
-  localStorage.removeItem("fridgeItems");
-};
-  </script>
+
+  function logout() {
+    const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่");
+    if (confirmLogout) {
+      localStorage.removeItem("isLogin");
+      localStorage.removeItem("loggedInEmail");
+      localStorage.removeItem("loggedInName");
+      window.location.href = "login.html";
+    }
+  }
+
+  function clearSearch() {
+    document.getElementById("ingredientSearch").value = "";
+  }
+
+  window.onload = function () {
+    const saved = localStorage.getItem("fridgeItems");
+    if (saved) {
+      selectedIngredients = JSON.parse(saved);
+
+      chips.forEach(chip => {
+        if (selectedIngredients.includes(chip.dataset.value)) {
+          chip.classList.add("selected");
+        }
+      });
+    }
+  };
+</script>
 </body>
 </html>
