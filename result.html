@@ -495,7 +495,6 @@
           <div class="question-title">วันนี้กินอะไรดี ?</div>
 
 <button class="action-btn orange-btn" onclick="rerollMeal()">🎲 สุ่มเมนูใหม่</button>
-<button class="action-btn blue-btn" onclick="goNearby()">📍 ค้นหาร้านใกล้ฉัน</button>
 <button class="action-btn orange-btn" onclick="goFridge()">🧊 ทำเมนูจากของที่มี</button>
 <button class="action-btn green-btn" onclick="goSetPreference()">⚙️ ตั้งค่าความชอบ</button>
 
@@ -3360,10 +3359,6 @@ function addToFavorites() {
     showMeal(currentMeal);
   }, 800);
 }
-
-    function goNearby() {
-      window.open("https://www.google.com/maps/search/ร้านอาหารใกล้ฉัน", "_blank");
-    }
 
     function goSetPreference() {
       window.location.href = "home.html";
